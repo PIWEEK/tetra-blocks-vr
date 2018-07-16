@@ -12,35 +12,13 @@ func _ready():
 
 func _process(delta):
 	var rightHand = get_node("RightHand");
-	
-	if(rightHand.is_button_pressed(1)):
-		print("1")
-		
+
+	rightHand.connect("button_pressed", self, buttonPressed)
+
 	# grid
 	if(rightHand.is_button_pressed(2)): 
 		print("2")
-		
-	if(rightHand.is_button_pressed(3)):
-		print("3")
-		
-	if(rightHand.is_button_pressed(4)):
-		print("4")
-		
-	if(rightHand.is_button_pressed(5)):
-		print("5")
-		
-	if(rightHand.is_button_pressed(6)):
-		print("6")
 
-	if(rightHand.is_button_pressed(7)):
-		print("7")
-
-	if(rightHand.is_button_pressed(8)):
-		print("8")
-
-	if(rightHand.is_button_pressed(9)):
-		print("9")
-
-	if(rightHand.is_button_pressed(10)):
-		print("10")
+func buttonPressed(id):
+	print(id)
 
