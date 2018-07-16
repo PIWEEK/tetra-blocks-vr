@@ -1,4 +1,5 @@
 extends ARVROrigin
+signal moveViewToRight
 
 # class member variables go here, for example:
 # var a = 2
@@ -10,7 +11,10 @@ func _ready():
 		get_viewport().arvr = true
 		get_viewport().hdr = false
 
-func _process(delta):
+func _process(delta):	
+	if Input.is_action_pressed("ui_right"):
+		emit_signal("moveViewToRight")
+	
 	var rightHand = get_node("RightHand");
 	
 	if(rightHand.is_button_pressed(1)):
@@ -44,3 +48,10 @@ func _process(delta):
 	if(rightHand.is_button_pressed(10)):
 		print("10")
 
+
+func _on_PlayerOrigin_moveViewToRight():
+	var angle = self.rotation_degrees.y
+	if(angle < 360):
+		self.rotation_degrees = Vector3(0, angle - 45, 0)
+	else:
+		self.rotation_degrees = Vector3(0, 0, 0)
