@@ -11,6 +11,7 @@ func create(type):
 	]
 	
 	var node = KinematicBody.new()
+	node.set('collision/safe_margin', 0.000001)
 	
 	if type == 's':
 		figureS(cubes)
@@ -30,7 +31,7 @@ func create(type):
 	createCubes(node, cubes)
 	
 	return node
-		
+
 func figureI(cubes):
 	applyTranslation(cubes, [
 		position(0, 0),

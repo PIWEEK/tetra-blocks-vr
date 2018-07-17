@@ -4,7 +4,6 @@
 [ext_resource path="res://toon.tres" type="Material" id=2]
 [ext_resource path="res://RigidBody.gd" type="Script" id=3]
 [ext_resource path="res://PlayArea.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Start.tscn" type="PackedScene" id=3]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -38,7 +37,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.200633, -0.600285 )
 
 [node name="floor" type="MeshInstance" parent="." index="1"]
 
-editor/display_folded = true
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -96,7 +94,6 @@ _sections_unfolded = [ "Light", "Omni" ]
 [node name="TestRigidBody" type="RigidBody" parent="." index="3"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32145, -0.618213 )
-
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -109,7 +106,7 @@ gravity_scale = 1.0
 custom_integrator = false
 continuous_cd = false
 contacts_reported = 0
-contact_monitor = false
+contact_monitor = true
 sleeping = false
 can_sleep = true
 axis_lock_linear_x = false
@@ -122,15 +119,19 @@ linear_velocity = Vector3( 0, 0, 0 )
 linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
+script = ExtResource( 3 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="CollisionShape" type="CollisionShape" parent="test_grab/RigidBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="TestRigidBody" index="0"]
 
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
+shape = SubResource( 3 )
 disabled = false
+_sections_unfolded = [ "Transform" ]
 
-[node name="MeshInstance" type="MeshInstance" parent="test_grab/RigidBody" index="1"]
+[node name="MeshInstance" type="MeshInstance" parent="TestRigidBody" index="1"]
 
+transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -143,8 +144,7 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 4 )
 skeleton = NodePath("..")
 material/0 = null
-
-[node name="Start" parent="." index="5" instance=ExtResource( 3 )]
+_sections_unfolded = [ "Transform" ]
 
 [node name="PlayArea" parent="." index="4" instance=ExtResource( 4 )]
 

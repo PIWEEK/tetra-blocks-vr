@@ -3,7 +3,7 @@ extends Spatial
 var figure = load("res://Figure.tscn")
 var count = 0;
 var nodes = []
-var SPEED = -0.5
+const SPEED = -0.5
 
 func _ready():
 	get_node("Timer").connect("timeout", self, "interval")
@@ -24,6 +24,8 @@ func interval():
 			figureNode.rotation_degrees = Vector3(0, 0, 90)
 			nodes.append(figureNode.create('j'))
 			
+	if count == 5:
+		test1()
 	
 	count = count + 1
 	
@@ -35,3 +37,19 @@ func _physics_process(delta):
 		
 		# if collision:
 		# 	print(node.id)
+		
+func test1():
+	var node = nodes[nodes.size() - 1]
+	var children = node.get_children()
+	
+	var cubes = []
+	var collisions = []
+	
+	for child in children:
+		if child is CollisionShape:
+			collisions.append(child)
+		else:
+			cubes.append(child)
+			
+	node.remove_child(cubes[0])
+	node.remove_child(collisions[0])
