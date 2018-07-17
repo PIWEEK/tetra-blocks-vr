@@ -2,7 +2,7 @@ extends Spatial
 
 var cube = load("res://Cube.tscn")
 
-func _ready():
+func create(type):
 	var cubes = [
 		cube.instance(),
 		cube.instance(),
@@ -10,8 +10,26 @@ func _ready():
 		cube.instance()
 	]
 	
-	figureO(cubes)
-	createCubes(cubes)
+	var node = KinematicBody.new()
+	
+	if type == 's':
+		figureS(cubes)
+	elif type == 'j':
+		figureJ(cubes)
+		
+	add_child(node)
+	
+	for cube in cubes: 
+		var collision = CollisionShape.new()
+		var shape = BoxShape.new()
+		
+		collision.shape = shape
+		collision.translation = cube.translation
+		node.add_child(collision)
+	
+	createCubes(node, cubes)
+	
+	return node
 		
 func figureI(cubes):
 	applyTranslation(cubes, [
@@ -85,15 +103,17 @@ func figureZ(cubes):
 	
 func applyColor(cubes, color):
 	for cube in cubes:
-		cube.get_node('Area/MeshInstance').get_surface_material(0).albedo_color = color
+		var material = SpatialMaterial.new()
+		material.albedo_color = color
+		cube.get_node('MeshInstance').set_surface_material(0, material)
 		
 func applyTranslation(cubes, translations):
 	for index in range(cubes.size()):
 		cubes[index].translation = translations[index]
 
-func createCubes(cubes):
+func createCubes(node, cubes):
 	for cube in cubes:
-		add_child(cube)	
+		node.add_child(cube)	
 	
 func position(row, column):
 	var position  = Vector3(0, 0, 0)
@@ -102,8 +122,3 @@ func position(row, column):
 	position.y = -(2 * row)
 	
 	return position
-
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
