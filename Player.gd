@@ -11,10 +11,7 @@ func _ready():
 		get_viewport().arvr = true
 		get_viewport().hdr = false
 
-func _process(delta):	
-	if Input.is_action_pressed("ui_right"):
-		emit_signal("moveViewToRight")
-	
+func _process(delta):
 	var rightHand = get_node("RightHand");
 	
 	if(rightHand.is_button_pressed(1)):
@@ -48,6 +45,9 @@ func _process(delta):
 	if(rightHand.is_button_pressed(10)):
 		print("10")
 
+func _input(event):
+	if Input.is_action_pressed("ui_right"):
+		emit_signal("moveViewToRight")
 
 func _on_PlayerOrigin_moveViewToRight():
 	var angle = self.rotation_degrees.y
