@@ -65,7 +65,9 @@ func throw():
 		oldParent.add_child(currentBody)
 		
 		print("new parent", oldParent.get_name())
-		
+		print("mode ", currentBody.get_mode())
+		print("name ", currentBody.get_name())
+				
 		oldParent = null
 		currentBody = null
 
