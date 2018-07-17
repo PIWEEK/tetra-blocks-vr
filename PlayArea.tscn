@@ -5,11 +5,19 @@
 [node name="PlayArea" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="Timer" type="Timer" parent="." index="0"]
 
 process_mode = 1
-wait_time = 2.0
+wait_time = 3.0
+one_shot = false
+autostart = true
+
+[node name="Timer2" type="Timer" parent="." index="1"]
+
+process_mode = 1
+wait_time = 0.5
 one_shot = false
 autostart = true
 

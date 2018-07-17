@@ -1,55 +1,136 @@
 extends Spatial
 
 var figure = load("res://Figure.tscn")
-var count = 0;
-var nodes = []
 const SPEED = -0.5
+var testCount = 0;
+const INITIAL_POSITION = {
+	"row": 8,
+	"column": 1
+}
 
-func _ready():
-	get_node("Timer").connect("timeout", self, "interval")
+var enableSpawn = true
+var matrix = []
 
-func interval():
-	if	(count < 3):
-		var figureNode = figure.instance()
+func _ready():	
+	for row in range(0, 10):
+		matrix.append([])
+		for column in range(0, 20):
+			matrix[row].append(null)
+			createArea(row, column)
+			
+	addFigure('o', INITIAL_POSITION.row, INITIAL_POSITION.column)
+	
+	get_node("Timer").connect("timeout", self, "spawn")
+	get_node("Timer2").connect("timeout", self, "move")
+
+func addFigure(type, initialRow, initialColumn):
+	enableSpawn = false
+	var figureNode = figure.instance()
+	var figureData = figureNode.create(type)
+	
+	figureData.matrix.invert()
+	
+	for row in range(figureData.matrix.size()):
+		for column in range(figureData.matrix[row].size()):
+			if figureData.matrix[row][column]:
+				var currentRow = row + initialRow
+				var currentColumn = column + initialColumn
+				var currentFigure = figureData.cubes.pop_front()
+				
+				matrix[currentRow][currentColumn] = {
+					"current": true,
+					"cube": currentFigure
+				}
+
+				currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
+				
+				add_child(currentFigure)
+				moveFigure(currentFigure, currentRow, currentColumn)
+	
+func moveFigure(node, row, column):
+	node.translation.x = 0.2 * column
+	node.translation.y = 0.2 * row
+		
+func canMove():
+	var move = true
+	
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var node = matrix[row][column]
+			
+			if node && node.current:
+				var newRow = row - 1
+				
+				if newRow < 0 || (matrix[newRow][column] != null && !matrix[newRow][column].current):
+					move = false
 					
-		add_child(figureNode)
-		
-		if (count == 1):
-			figureNode.translation = Vector3(-0.20, 0, 0)
-			nodes.append(figureNode.create('s'))
-		elif count == 0:
-			nodes.append(figureNode.create('s'))
-		elif count == 2:
-			figureNode.translation = Vector3(-0.20, 0, 0)
-			figureNode.rotation_degrees = Vector3(0, 0, 90)
-			nodes.append(figureNode.create('j'))
+	return move
 			
-	if count == 5:
-		test1()
+func disableCurrent():
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var node = matrix[row][column]
+			if node:
+				node.current = false
+
+func move():
+	if !canMove():
+		disableCurrent()
+		enableSpawn = true
+		return null
 	
-	count = count + 1
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var node = matrix[row][column]
+			if node && node.current:
+				var newRow = row - 1
+				if newRow >= 0:
+					matrix[newRow][column] = node
+					matrix[row][column] = null;
+					moveFigure(node.cube, newRow, column)
+
+func createArea(row, column):
+	var area = Area.new()
+	area.translation.x = 0.2 * row
+	area.translation.y = 0.2 * column
 	
-func _physics_process(delta):
-	for node in nodes:
-		var relVec = Vector3(0, SPEED, 0) * delta
+	var collision = CollisionShape.new()
+	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
+	collision.shape = BoxShape.new()
+	area.add_child(collision)
+	
+	add_child(area)
+	
+# todo 
+func removeFilledLines():
+	for column in range(matrix[0].size()):
+		var node = matrix[0][column]
 		
-		var collision = node.move_and_collide(relVec)
-		
-		# if collision:
-		# 	print(node.id)
-		
-func test1():
-	var node = nodes[nodes.size() - 1]
-	var children = node.get_children()
-	
-	var cubes = []
-	var collisions = []
-	
-	for child in children:
-		if child is CollisionShape:
-			collisions.append(child)
-		else:
-			cubes.append(child)
+		if node:
+			node.cube.get_parent().remove_child(node.cube)
+			matrix[0][column] = null
 			
-	node.remove_child(cubes[0])
-	node.remove_child(collisions[0])
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var node = matrix[row][column]
+			
+			if node:
+				var newRow = row - 1
+				
+				matrix[newRow][column] = node
+				matrix[row][column] = null;
+				
+				moveFigure(node.cube, newRow, column)
+				
+			
+func spawn():
+	if enableSpawn:
+		addFigure('t', INITIAL_POSITION.row, INITIAL_POSITION.column)
+		
+		# test remove
+		# if testCount == 2:
+		#	removeFilledLines()
+		# testCount = testCount + 1
+		
+		
+		

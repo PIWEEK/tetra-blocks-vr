@@ -3,123 +3,121 @@ extends Spatial
 var cube = load("res://Cube.tscn")
 
 func create(type):
-	var cubes = [
-		cube.instance(),
-		cube.instance(),
-		cube.instance(),
-		cube.instance()
-	]
-	
-	var node = KinematicBody.new()
-	node.set('collision/safe_margin', 0.000001)
-	
 	if type == 's':
-		figureS(cubes)
+		return figureS()
 	elif type == 'j':
-		figureJ(cubes)
-		
-	add_child(node)
-	
-	for cube in cubes: 
-		var collision = CollisionShape.new()
-		var shape = BoxShape.new()
-		
-		collision.shape = shape
-		collision.translation = cube.translation
-		node.add_child(collision)
-	
-	createCubes(node, cubes)
-	
-	return node
+		return figureJ()
+	elif type == 'i':
+		return figureI()
+	elif type == 't':
+		return figureT()
+	elif type == 'l':
+		return figureL()
+	elif type == 'o':
+		return figureO()
+	elif type == 'z':
+		return figureZ()
 
-func figureI(cubes):
-	applyTranslation(cubes, [
-		position(0, 0),
-		position(0, 1),
-		position(0, 2),
-		position(0, 3)
-	])
-	
+func figureI():
+	var cubes = instanceCubes()
 	applyColor(cubes, '00FFFF')
 	
-func figureJ(cubes):
-	applyTranslation(cubes, [
-		position(0, 0),
-		position(0, 1),
-		position(0, 2),
-		position(1, 2)
-	])
+	return {
+		"matrix": [
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[1, 1, 1, 1]
+		],
+		"cubes": cubes
+	}
 	
+func figureJ():
+	var cubes = instanceCubes()
 	applyColor(cubes, '0000FF')
 	
-func figureL(cubes):
-	applyTranslation(cubes, [
-		position(0, 0),
-		position(0, 1),
-		position(0, 2),
-		position(1, 0)
-	])
+	return {
+		"matrix": [
+			[0, 0, 0],
+			[0, 0, 1],
+			[1, 1, 1]
+		],
+		"cubes": cubes
+	}
 	
+func figureL():
+	var cubes = instanceCubes()
 	applyColor(cubes, 'FFA500')
 	
-func figureO(cubes):
-	applyTranslation(cubes, [
-		position(0, 0),
-		position(0, 1),
-		position(1, 0),
-		position(1, 1)
-	])
+	return {
+		"matrix": [
+			[0, 0, 0],
+			[1, 0, 0],
+			[1, 1, 1]
+		],
+		"cubes": cubes
+	}
 	
+func figureO():
+	var cubes = instanceCubes()
 	applyColor(cubes, 'FFFF00')
 	
-func figureS(cubes):
-	applyTranslation(cubes, [
-		position(1, 0),
-		position(1, 1),
-		position(0, 1),
-		position(0, 2)
-	])
+	return {
+		"matrix": [
+			[1, 1],
+			[1, 1]
+		],
+		"cubes": cubes
+	}
 	
+func figureS():
+	var cubes = instanceCubes()
 	applyColor(cubes, '00FF00')
 	
-func figureT(cubes):
-	applyTranslation(cubes, [
-		position(0, 0),
-		position(0, 1),
-		position(0, 2),
-		position(1, 1)
-	])
-	
+	return {
+		"matrix": [
+			[0, 0, 0],
+			[0, 1, 1],
+			[1, 1, 0]
+		],
+		"cubes": cubes
+	}	
+
+func figureT():
+	var cubes = instanceCubes()
 	applyColor(cubes, '80080')
 	
-func figureZ(cubes):
-	applyTranslation(cubes, [
-		position(0, 0),
-		position(0, 1),
-		position(1, 1),
-		position(1, 2)
-	])
+	return {
+		"matrix": [
+			[0, 0, 0],
+			[1, 1, 1],
+			[0, 1, 0]
+		],
+		"cubes": cubes
+	}
 	
+func figureZ():
+	var cubes = instanceCubes()
 	applyColor(cubes, 'FF0000')
+	
+	return {
+		"matrix": [
+			[0, 0, 0],
+			[1, 1, 0],
+			[0, 1, 1]
+		],
+		"cubes": cubes
+	}	
 	
 func applyColor(cubes, color):
 	for cube in cubes:
 		var material = SpatialMaterial.new()
 		material.albedo_color = color
 		cube.get_node('MeshInstance').set_surface_material(0, material)
-		
-func applyTranslation(cubes, translations):
-	for index in range(cubes.size()):
-		cubes[index].translation = translations[index]
-
-func createCubes(node, cubes):
-	for cube in cubes:
-		node.add_child(cube)	
 	
-func position(row, column):
-	var position  = Vector3(0, 0, 0)
-	
-	position.x = 2 * column
-	position.y = -(2 * row)
-	
-	return position
+func instanceCubes():
+	return [
+		cube.instance(),
+		cube.instance(),
+		cube.instance(),
+		cube.instance()
+	]
