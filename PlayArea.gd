@@ -94,6 +94,7 @@ func disableCurrent():
 func move():
 	if !canMove():
 		disableCurrent()
+		removeFilledLines()
 		enableSpawn()
 		return null
 	
@@ -146,26 +147,46 @@ func removeCurrent():
 				node.cube.get_parent().remove_child(node.cube)
 				matrix[row][column] = null
 
-# todo 
 func removeFilledLines():
-	for column in range(matrix[0].size()):
-		var node = matrix[0][column]
-		
-		if node:
-			node.cube.get_parent().remove_child(node.cube)
-			matrix[0][column] = null
-			
+	var rowsToDelete = []
+	
 	for row in range(matrix.size()):
+		var rowToDelete = row
+		
 		for column in range(matrix[row].size()):
 			var node = matrix[row][column]
 			
+			if !node:
+				rowToDelete = null
+		
+		if rowToDelete != null:
+			rowsToDelete.append(rowToDelete)
+	
+	for rowToDelete in rowsToDelete:
+		for column in range(matrix[rowToDelete].size()):
+			var node = matrix[rowToDelete][column]
+			
 			if node:
-				var newRow = row - 1
+				node.cube.get_parent().remove_child(node.cube)
+				matrix[rowToDelete][column] = null
 				
-				matrix[newRow][column] = node
-				matrix[row][column] = null;
+	print(rowsToDelete)
+	
+	if !rowsToDelete.size():
+		return null
+	
+	for row in range(matrix.size()):
+		if row > rowsToDelete[rowsToDelete.size() - 1]:
+			for column in range(matrix[row].size()):
+				var node = matrix[row][column]
 				
-				moveFigure(node.cube, newRow, column)
+				if node:
+					var newRow = row - rowsToDelete.size() 
+					
+					matrix[newRow][column] = node
+					matrix[row][column] = null;
+					
+					moveFigure(node.cube, newRow, column)
 
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
