@@ -9,7 +9,7 @@ size = Vector2( 2, 2 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=2]
 
 render_priority = 0
 flags_transparent = false
@@ -32,7 +32,7 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.96479, 0.980469, 0.478745, 1 )
+albedo_color = Color( 0.721645, 0.855469, 0.0768585, 0 )
 albedo_texture = ExtResource( 1 )
 metallic = 0.0
 metallic_specular = 0.5
@@ -60,7 +60,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo" ]
+_sections_unfolded = [ "Albedo", "Flags", "Parameters", "Resource", "Vertex Color" ]
 
 [sub_resource type="BoxShape" id=3]
 
@@ -94,7 +94,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="Area" index="0"]
 
-transform = Transform( -0.996202, -3.24603e-07, 1.62302e-07, 1.62302e-07, 2.64423e-14, 0.996202, -3.24603e-07, 0.996202, 2.64423e-14, 0, 0, 0 )
+transform = Transform( -0.996202, -3.24603e-07, 1.62302e-07, 1.62302e-07, 2.64423e-14, 0.996202, -3.24603e-07, 0.996202, 2.64423e-14, 0, 0.87546, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -106,7 +106,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
-material/0 = SubResource( 4 )
+material/0 = SubResource( 2 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="1"]
