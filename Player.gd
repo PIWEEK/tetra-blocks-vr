@@ -5,9 +5,11 @@ var figureScene = load("res://Figure.tscn").instance()
 var main
 var rightHand
 var currentBody
-var oldParent 
+
+signal throw
 
 func _ready():
+	# print('ready')
 	main = get_node("/root/Main")
 	
 	var vr = ARVRServer.find_interface("OpenVR")
@@ -17,12 +19,13 @@ func _ready():
 	
 	rightHand = get_node("RightHand");
 	rightHand.connect("button_pressed", self, "buttonPressed")
-	# rightHand.connect("button_release", self, "buttonRelease")
+	rightHand.connect("button_release", self, "buttonRelease")
 	
 	rightHand.get_node("Area").connect("body_entered", self, "_on_body_enter")
 
 func _on_body_enter(body):
 	currentBody = body
+	# 	print('_on_body_enter', currentBody)
 	
 func _process(delta):
 	pass
@@ -31,12 +34,14 @@ func buttonPressed(id):
 	if (id == 2 && currentBody):
 		pick()
 	
-#func buttonRelease(id):
-#	if (id == 2 && currentBody):
-#		throw()	
+func buttonRelease(id):
+	if (id == 2 && currentBody):
+		# print('release!!')
+		throw()	
 	
 func pick():
-	if (rightHand.get_node("Figure").get_child_count() == 0):
+	# print(currentBody, ' | ', rightHand.get_node("Figure").get_child_count())
+	if (currentBody && rightHand.get_node("Figure").get_child_count() == 0):
 		var mainScene = get_node('/root/Main')
 		var matrix = mainScene.getMatrix()[0]
 	
@@ -50,9 +55,7 @@ func pick():
 				if node && node.cube == currentBody && node.current:
 					rowFinded = row
 					columnFinded = column
-				
-		
-		oldParent = currentBody.get_parent()
+					
 		var handFigure = rightHand.get_node("Figure")
 	
 		if rowFinded && columnFinded:
@@ -74,28 +77,15 @@ func pick():
 			main.addDrag(type)
 		
 			# todo: improve get center
-			handFigure.translation = Vector3(-0.2, -0.2, 0)
+			# handFigure.translation = Vector3(-0.2, -0.2, 0)
 			mainScene.getPlayArea().removeCurrent()
 		
 func throw():
-	if (currentBody):
-		print("throw")
-		currentBody.get_parent().remove_child(currentBody)
+	if (rightHand.get_node("Figure").get_child_count() > 0):
+		emit_signal("throw")
 		
-		currentBody.set_mode(0)
-		print(rightHand.get_global_transform().origin)
-		
-		#currentBody.translation = Vector3(0, 0, 0)
-		currentBody.translation = rightHand.get_global_transform().origin
-		currentBody.rotation_degrees = rightHand.rotation_degrees
-		oldParent.add_child(currentBody)
-		
-		print("new parent", oldParent.get_name())
-		print("mode ", currentBody.get_mode())
-		print("name ", currentBody.get_name())
-				
-		oldParent = null
-		currentBody = null
+		for i in rightHand.get_node("Figure").get_children():
+			i.queue_free()
 
 func _input(event):
 	if Input.is_action_pressed("ui_right"):
