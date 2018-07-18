@@ -2,7 +2,7 @@
 
 [ext_resource path="res://PlayArea.gd" type="Script" id=1]
 
-[node name="PlayArea" type="Spatial"]
+[node name="PlayArea" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]

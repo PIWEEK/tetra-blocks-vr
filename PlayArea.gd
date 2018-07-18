@@ -8,8 +8,11 @@ const INITIAL_POSITION = {
 	"column": 1
 }
 
+var figureNode = figure.instance()
 var enableSpawn = true
 var matrix = []
+var areas = []
+var dropCandidateBlocks = []
 
 func _ready():	
 	for row in range(0, 10):
@@ -27,7 +30,6 @@ func _ready():
 
 func addFigure(type, initialRow, initialColumn):
 	enableSpawn = false
-	var figureNode = figure.instance()
 	var figureData = figureNode.create(type)
 	
 	figureData.matrix.invert()
@@ -103,6 +105,11 @@ func createArea(row, column):
 	area.add_child(collision)
 	
 	add_child(area)
+	areas.append({
+		"row": row,
+		"column": column,
+		"node": area	
+	})
 	
 func removeCurrent():
 	for row in range(matrix.size()):
@@ -111,8 +118,7 @@ func removeCurrent():
 			if node && node.current:
 				node.cube.get_parent().remove_child(node.cube)
 				matrix[row][column] = null
-	
-	enableSpawn = true
+
 # todo 
 func removeFilledLines():
 	for column in range(matrix[0].size()):
@@ -133,16 +139,55 @@ func removeFilledLines():
 				matrix[row][column] = null;
 				
 				moveFigure(node.cube, newRow, column)
+
+func dropCandidate(type, initialRow, initialColumn):
+	removeCurrent()
+	enableSpawn = false
+	
+	var figureData = figureNode.create(type) 
+	figureData.matrix.invert()
+	
+	for row in range(figureData.matrix.size()):
+		for column in range(figureData.matrix[row].size()):
+			if figureData.matrix[row][column]:
+				var currentRow = row + initialRow
+				var currentColumn = column + initialColumn
+				var currentFigure = figureData.cubes.pop_front()
+
+				currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
 				
-			
+				add_child(currentFigure)
+				moveFigure(currentFigure, currentRow, currentColumn)
+				
+				dropCandidateBlocks.append({
+					"row": currentRow,
+					"column": currentColumn,
+					"cube": currentFigure,
+					"type": type					
+				})
+				
+func confirmDropCandidate():
+	for currentBlockCandidate in dropCandidateBlocks:
+		matrix[currentBlockCandidate.row][currentBlockCandidate.column] = {
+			"current": true,
+			"cube": currentBlockCandidate.cube,
+			"type": currentBlockCandidate.type
+		}
+		
+	dropCandidateBlocks = []
+	enableSpawn = true
+				
+func deleteDropCandidate():
+	for it in dropCandidateBlocks:
+		it.get_parent().remove_child(it);
+		
+	enableSpawn = true
+
 func spawn():
 	if enableSpawn:
 		addFigure('t', INITIAL_POSITION.row, INITIAL_POSITION.column)
-		
-		# test remove
-		# if testCount == 2:
-		#	removeFilledLines()
-		# testCount = testCount + 1
+			
+		testCount = testCount + 1
 		
 		
 		
