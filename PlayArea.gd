@@ -3,6 +3,8 @@ extends Spatial
 var figure = load("res://Figure.tscn")
 var main
 var player
+var rightHand
+var leftHand
 var testCount = 0;
 var timer
 const INITIAL_POSITION = {
@@ -29,6 +31,8 @@ func _ready():
 	
 	main = get_node("/root/Main")
 	player = main.get_node("PlayerOrigin")
+	rightHand = player.get_node("RightHand")
+	
 	player.connect("throw", self, "drop")
 	
 	timer = get_node("Timer")
@@ -170,8 +174,6 @@ func removeFilledLines():
 				node.cube.get_parent().remove_child(node.cube)
 				matrix[rowToDelete][column] = null
 				
-	print(rowsToDelete)
-	
 	if !rowsToDelete.size():
 		return null
 	
@@ -228,6 +230,8 @@ func dropCandidate(type, initialRow, initialColumn):
 					
 					add_child(currentFigure)
 					moveFigure(currentFigure, currentRow, currentColumn)
+					
+					print(rightHand.rotation_degrees)
 					
 					dropCandidateBlocks.append({
 						"matrix": figureData.matrix,

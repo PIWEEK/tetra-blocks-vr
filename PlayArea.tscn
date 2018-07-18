@@ -6,7 +6,7 @@
 
 extents = Vector3( 1.34557, 2.61867, 1 )
 
-[node name="PlayArea" type="Spatial" index="0"]
+[node name="PlayArea" type="Spatial"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
@@ -14,7 +14,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="Timer" type="Timer" parent="." index="0"]
 
 process_mode = 1
-wait_time = 1.0
+wait_time = 3.0
 one_shot = false
 autostart = true
 
