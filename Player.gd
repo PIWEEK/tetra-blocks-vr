@@ -79,6 +79,7 @@ func pick():
 			# todo: improve get center
 			# handFigure.translation = Vector3(-0.2, -0.2, 0)
 			mainScene.getPlayArea().removeCurrent()
+			mainScene.getPlayArea().enableSpawn()
 		
 func throw():
 	if (rightHand.get_node("Figure").get_child_count() > 0):

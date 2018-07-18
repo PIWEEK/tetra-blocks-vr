@@ -6,7 +6,7 @@
 
 extents = Vector3( 1.34557, 2.61867, 1 )
 
-[node name="PlayArea" type="Spatial" index="0"]
+[node name="PlayArea" type="Spatial"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
@@ -52,7 +52,9 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="MainArea" index="0"]
 
+transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shape = SubResource( 1 )
 disabled = false
+_sections_unfolded = [ "Transform" ]
 
 

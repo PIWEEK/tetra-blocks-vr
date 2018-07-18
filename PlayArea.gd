@@ -3,15 +3,14 @@ extends Spatial
 var figure = load("res://Figure.tscn")
 var main
 var player
-const SPEED = -0.5
 var testCount = 0;
+var timer
 const INITIAL_POSITION = {
-	"row": 8,
+	"row": 17,
 	"column": 1
 }
 
 var figureNode = figure.instance()
-var enableSpawn = true
 var matrix = []
 var areas = []
 var dropCandidateBlocks = []
@@ -22,28 +21,28 @@ var oldDropCandidate
 var inMainArea = false
 
 func _ready():	
-	for row in range(0, 10):
+	for row in range(0, 20):
 		matrix.append([])
-		for column in range(0, 20):
+		for column in range(0, 10):
 			matrix[row].append(null)
 			createArea(row, column)
-			
-	addFigure('o', INITIAL_POSITION.row, INITIAL_POSITION.column)
 	
 	main = get_node("/root/Main")
 	player = main.get_node("PlayerOrigin")
 	player.connect("throw", self, "drop")
 	
-	get_node("Timer").connect("timeout", self, "spawn")
+	timer = get_node("Timer")
+	
+	timer.connect("timeout", self, "spawn")
 	get_node("Timer2").connect("timeout", self, "move")
 	
 	get_node("MainArea").connect("area_entered", self, "enterMainArea")
 	get_node("MainArea").connect("area_exited", self, "leaveMainArea")
 	
-	main.addMatrix(matrix)
+	main.addMatrix(matrix) 
 
 func addFigure(type, initialRow, initialColumn):
-	enableSpawn = false
+	disableSpawn()
 	var figureData = figureNode.create(type)
 	
 	figureData.matrix.invert()
@@ -95,7 +94,7 @@ func disableCurrent():
 func move():
 	if !canMove():
 		disableCurrent()
-		enableSpawn = true
+		enableSpawn()
 		return null
 	
 	for row in range(matrix.size()):
@@ -138,14 +137,7 @@ func enterArea(body, row, column):
 			"row": row,
 			"column": column	
 		}
-
-func removeCurrentFromMatrix():
-	for row in range(matrix.size()):
-		for column in range(matrix[row].size()):
-			var node = matrix[row][column]
-			if node && node.current:
-				matrix[row][column] = null
-
+		
 func removeCurrent():
 	for row in range(matrix.size()):
 		for column in range(matrix[row].size()):
@@ -177,7 +169,7 @@ func removeFilledLines():
 
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
-	enableSpawn = false
+	disableSpawn()
 	dropInProgress = true
 	
 	if dropCandidateBlocks.size():
@@ -223,6 +215,13 @@ func dropCandidate(type, initialRow, initialColumn):
 						"cube": currentFigure,
 						"type": type					
 					})
+		
+func resetDrop():
+	dropCandidateBlocks = []
+	dropCandidateMatrix = null
+	dropInProgress = false
+	currentDropCandidate = null
+	oldDropCandidate = null	
 				
 func confirmDropCandidate():
 	for currentBlockCandidate in dropCandidateBlocks:
@@ -234,23 +233,14 @@ func confirmDropCandidate():
 		
 		# print(currentBlockCandidate.row, ' | ', currentBlockCandidate.column)
 		
-	enableSpawn = true
-	dropCandidateBlocks = []
-	dropCandidateMatrix = null
-	dropInProgress = false
-	currentDropCandidate = null
-	oldDropCandidate = null
+	resetDrop()
 				
 func deleteDropCandidate():
 	for it in dropCandidateBlocks:
 		remove_child(it.cube);
 		
-	enableSpawn = true
-	dropCandidateBlocks = []
-	dropCandidateMatrix = null
-	dropInProgress = false
-	currentDropCandidate = null
-	oldDropCandidate = null
+	resetDrop()
+	enableSpawn()
 	
 func enterMainArea(area):
 	inMainArea = true
@@ -263,11 +253,20 @@ func leaveMainArea(area):
 func drop():
 	confirmDropCandidate()
 	
+func randomFigure():
+	var figures = ['s', 'j', 'i', 't', 'l', 'o', 'z']
+	
+	return figures[floor(rand_range(0, figures.size() - 1))]
+
+func disableSpawn():
+	timer.stop()
+	
+func enableSpawn():
+	timer.start()
+	
 func spawn():
-	if enableSpawn:
-		# addFigure('t', INITIAL_POSITION.row, INITIAL_POSITION.column)
-			
-		testCount = testCount + 1
+	addFigure(randomFigure(), INITIAL_POSITION.row, INITIAL_POSITION.column)
+	testCount = testCount + 1
 		
 func _process(delta):		
 	if inMainArea && currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != oldDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
