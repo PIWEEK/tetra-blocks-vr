@@ -104,13 +104,23 @@ func createArea(row, column):
 	collision.shape = BoxShape.new()
 	area.add_child(collision)
 	
+	area.connect("area_entered", self, "enterArea")
+	
 	add_child(area)
 	areas.append({
 		"row": row,
 		"column": column,
 		"node": area	
 	})
+func enterArea(areaEnterd):
+	var areaFinded = null
 	
+	for area in areas:
+		if area.node == areaEnterd:
+			areaFinded = area
+
+	# dropCandidate('s', areaFinded.row, areaFinded.column)
+
 func removeCurrent():
 	for row in range(matrix.size()):
 		for column in range(matrix[row].size()):
@@ -142,6 +152,7 @@ func removeFilledLines():
 
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
+	deleteDropCandidate()
 	enableSpawn = false
 	
 	var figureData = figureNode.create(type) 
@@ -179,7 +190,7 @@ func confirmDropCandidate():
 				
 func deleteDropCandidate():
 	for it in dropCandidateBlocks:
-		it.get_parent().remove_child(it);
+		remove_child(it.cube);
 		
 	enableSpawn = true
 
