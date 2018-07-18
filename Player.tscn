@@ -1,13 +1,76 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=2]
 
-[sub_resource type="SphereShape" id=1]
+[sub_resource type="PlaneMesh" id=4]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+size = Vector2( 2, 2 )
+subdivide_width = 0
+subdivide_depth = 0
+
+[sub_resource type="SpatialMaterial" id=5]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0, 0, 0, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo" ]
+
+[sub_resource type="PlaneShape" id=6]
+
+plane = Plane( 0, 1, 0, 0 )
+
+[sub_resource type="SphereShape" id=2]
 
 radius = 1.0
 
-[sub_resource type="CylinderMesh" id=2]
+[sub_resource type="CylinderMesh" id=3]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 top_radius = 1.0
@@ -38,84 +101,39 @@ near = 0.05
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="Panel" type="Panel" parent="ARVRCamera" index="0"]
+[node name="StaticBody" type="StaticBody" parent="ARVRCamera" index="0"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 820.0
-margin_top = 395.0
-margin_right = 1020.0
-margin_bottom = 595.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-_sections_unfolded = [ "Rect" ]
-
-[node name="FrontPiece" type="Polygon2D" parent="ARVRCamera/Panel" index="0"]
-
-polygon = PoolVector2Array( 80, 5, 130, 5, 130, 55, 80, 55 )
-uv = PoolVector2Array(  )
-color = Color( 0.960938, 0.0563049, 0.0563049, 1 )
-vertex_colors = PoolColorArray(  )
-offset = Vector2( 0, 0 )
-antialiased = false
-texture = null
-texture_offset = Vector2( 0, 0 )
-texture_scale = Vector2( 1, 1 )
-texture_rotation_degrees = 0.0
-invert_enable = false
-invert_border = 100.0
+input_ray_pickable = false
+input_capture_on_drag = false
+collision_layer = 1
+collision_mask = 1
+friction = 1.0
+bounce = 0.0
+constant_linear_velocity = Vector3( 0, 0, 0 )
+constant_angular_velocity = Vector3( 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="LeftPiece" type="Polygon2D" parent="ARVRCamera/Panel" index="1"]
+[node name="MeshInstance" type="MeshInstance" parent="ARVRCamera/StaticBody" index="0"]
 
-polygon = PoolVector2Array( 5, 80, 55, 80, 55, 130, 5, 130 )
-uv = PoolVector2Array(  )
-color = Color( 0.0284271, 0.808594, 0.0406172, 1 )
-vertex_colors = PoolColorArray(  )
-offset = Vector2( 0, 0 )
-antialiased = false
-texture = null
-texture_offset = Vector2( 0, 0 )
-texture_scale = Vector2( 1, 1 )
-texture_rotation_degrees = 0.0
-invert_enable = false
-invert_border = 100.0
+transform = Transform( -0.1, 3.89414e-08, 1.70218e-15, 0, -4.37114e-09, 0.1, 3.89414e-08, 0.1, 4.37114e-09, -0.0625287, 0.0736328, -0.0799963 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 4 )
+skeleton = NodePath("..")
+material/0 = SubResource( 5 )
+_sections_unfolded = [ "Transform", "material" ]
 
-[node name="RightPiece" type="Polygon2D" parent="ARVRCamera/Panel" index="2"]
+[node name="CollisionShape" type="CollisionShape" parent="ARVRCamera/StaticBody" index="1"]
 
-polygon = PoolVector2Array( 145, 80, 195, 80, 195, 130, 145, 130 )
-uv = PoolVector2Array(  )
-color = Color( 0.0249939, 0.164326, 0.710938, 1 )
-vertex_colors = PoolColorArray(  )
-offset = Vector2( 0, 0 )
-antialiased = false
-texture = null
-texture_offset = Vector2( 0, 0 )
-texture_scale = Vector2( 1, 1 )
-texture_rotation_degrees = 0.0
-invert_enable = false
-invert_border = 100.0
-
-[node name="BackPiece" type="Polygon2D" parent="ARVRCamera/Panel" index="3"]
-
-polygon = PoolVector2Array( 80, 145, 130, 145, 130, 195, 80, 195 )
-uv = PoolVector2Array(  )
-color = Color( 0.960938, 0.883841, 0.0638123, 1 )
-vertex_colors = PoolColorArray(  )
-offset = Vector2( 0, 0 )
-antialiased = false
-texture = null
-texture_offset = Vector2( 0, 0 )
-texture_scale = Vector2( 1, 1 )
-texture_rotation_degrees = 0.0
-invert_enable = false
-invert_border = 100.0
+shape = SubResource( 6 )
+disabled = false
 
 [node name="LeftHand" parent="." index="1" instance=ExtResource( 2 )]
 
@@ -153,7 +171,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="RightHand/Area" index="0"]
 
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 disabled = false
 
 [node name="Figure" type="Spatial" parent="RightHand" index="2"]
@@ -173,7 +191,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
+mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Geometry", "Transform" ]
