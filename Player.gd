@@ -23,8 +23,6 @@ func _ready():
 func _on_body_enter(body):
 	currentBody = body
 	
-	print ("body enter", body.get_name())
-	
 func _process(delta):
 	pass
 	
@@ -66,7 +64,7 @@ func pick():
 				for column in range(handCubes.matrix[row].size()):
 					if handCubes.matrix[row][column]:
 						var currentFigure = handCubes.cubes.pop_front()
-						print('añado')
+
 						handFigure.add_child(currentFigure)
 						currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
 						currentFigure.translation.x = 0.2 * column
@@ -76,8 +74,6 @@ func pick():
 		# todo: improve get center
 		handFigure.translation = Vector3(-0.2, -0.2, 0)
 		mainScene.getPlayArea().removeCurrent()
-		
-		print("pick")
 	
 func throw():
 	if (currentBody):

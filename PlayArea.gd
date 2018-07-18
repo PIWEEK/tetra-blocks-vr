@@ -13,6 +13,10 @@ var enableSpawn = true
 var matrix = []
 var areas = []
 var dropCandidateBlocks = []
+var dropCandidateMatrix
+var dropInProgress = false
+var currentDropCandidate
+var oldDropCandidate
 
 func _ready():	
 	for row in range(0, 10):
@@ -96,15 +100,15 @@ func move():
 
 func createArea(row, column):
 	var area = Area.new()
-	area.translation.x = 0.2 * row
-	area.translation.y = 0.2 * column
+	area.translation.y = 0.2 * row
+	area.translation.x = 0.2 * column
 	
 	var collision = CollisionShape.new()
 	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
 	collision.shape = BoxShape.new()
 	area.add_child(collision)
 	
-	area.connect("area_entered", self, "enterArea")
+	area.connect("area_entered", self, "enterArea", [row, column])
 	
 	add_child(area)
 	areas.append({
@@ -112,14 +116,24 @@ func createArea(row, column):
 		"column": column,
 		"node": area	
 	})
-func enterArea(areaEnterd):
-	var areaFinded = null
 	
-	for area in areas:
-		if area.node == areaEnterd:
-			areaFinded = area
+func exitArea():
+	deleteDropCandidate()
+	
+func enterArea(body, row, column):
+	if body.get_parent().get_name() == 'RightHand' && body.get_parent().get_node('Figure').get_child_count() > 0:
+		print(row, ' | ', column)
+		currentDropCandidate = {
+			"row": row,
+			"column": column	
+		}
+		
+#	var areaFinded = null
+#
+#	for area in areas:
+#		if area.node == areaEnterd:
+#			areaFinded = area
 
-	# dropCandidate('s', areaFinded.row, areaFinded.column)
 
 func removeCurrent():
 	for row in range(matrix.size()):
@@ -152,30 +166,49 @@ func removeFilledLines():
 
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
-	deleteDropCandidate()
 	enableSpawn = false
+	dropInProgress = true
 	
-	var figureData = figureNode.create(type) 
-	figureData.matrix.invert()
+	if dropCandidateBlocks.size():
+		var count = 0
+		print(initialRow, ' | ', initialColumn);
+		
+		for row in range(dropCandidateMatrix.size()):
+			for column in range(dropCandidateMatrix[row].size()):
+				if dropCandidateMatrix[row][column]:
+					var currentRow = row + initialRow
+					var currentColumn = column + initialColumn
+					var currentFigure = dropCandidateBlocks[count]
+					
+					count = count + 1
+					moveFigure(currentFigure.cube, currentRow, currentColumn)
+	else:
+		var figureData = figureNode.create(type) 
+		figureData.matrix.invert()
+		
+		dropCandidateMatrix = figureData.matrix
+		
+		for row in range(figureData.matrix.size()):
+			for column in range(figureData.matrix[row].size()):
+				if figureData.matrix[row][column]:
+					var currentRow = row + initialRow
+					var currentColumn = column + initialColumn
+					var currentFigure = figureData.cubes.pop_front()
+					
+					currentFigure.get_node('CollisionShape').get_parent().remove_child(currentFigure.get_node('CollisionShape'))
 	
-	for row in range(figureData.matrix.size()):
-		for column in range(figureData.matrix[row].size()):
-			if figureData.matrix[row][column]:
-				var currentRow = row + initialRow
-				var currentColumn = column + initialColumn
-				var currentFigure = figureData.cubes.pop_front()
-
-				currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
-				
-				add_child(currentFigure)
-				moveFigure(currentFigure, currentRow, currentColumn)
-				
-				dropCandidateBlocks.append({
-					"row": currentRow,
-					"column": currentColumn,
-					"cube": currentFigure,
-					"type": type					
-				})
+					currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
+					
+					add_child(currentFigure)
+					moveFigure(currentFigure, currentRow, currentColumn)
+					
+					dropCandidateBlocks.append({
+						"matrix": figureData.matrix,
+						"row": currentRow,
+						"column": currentColumn,
+						"cube": currentFigure,
+						"type": type					
+					})
 				
 func confirmDropCandidate():
 	for currentBlockCandidate in dropCandidateBlocks:
@@ -187,12 +220,14 @@ func confirmDropCandidate():
 		
 	dropCandidateBlocks = []
 	enableSpawn = true
+	dropInProgress = false
 				
 func deleteDropCandidate():
 	for it in dropCandidateBlocks:
 		remove_child(it.cube);
 		
 	enableSpawn = true
+	dropInProgress = false
 
 func spawn():
 	if enableSpawn:
@@ -200,5 +235,11 @@ func spawn():
 			
 		testCount = testCount + 1
 		
+func _process(delta):		
+	if currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != currentDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
+		dropCandidate('s', currentDropCandidate.row, currentDropCandidate.column)
 		
-		
+		oldDropCandidate = {
+			"row": currentDropCandidate.row,
+			"column": currentDropCandidate.column
+		}
