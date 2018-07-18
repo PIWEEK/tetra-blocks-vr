@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://toon.tres" type="Material" id=2]
 [ext_resource path="res://PlayArea.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Start.tscn" type="PackedScene" id=4]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -23,6 +24,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.200633, -0.600285 )
 
 [node name="floor" type="MeshInstance" parent="." index="1"]
 
+editor/display_folded = true
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -78,6 +80,10 @@ omni_shadow_detail = 1
 _sections_unfolded = [ "Light", "Omni" ]
 
 [node name="PlayArea" parent="." index="3" instance=ExtResource( 3 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.32925 )
+
+[node name="Start" parent="." index="4" instance=ExtResource( 4 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.32925 )
 
