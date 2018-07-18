@@ -21,7 +21,7 @@ singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib" ]
 [importer_defaults]
 
 texture={
-"compress/hdr_mode": 0,
+"compress/hdr_mode": 1,
 "compress/lossy_quality": 0.7,
 "compress/mode": 2,
 "compress/normal_map": 0,
