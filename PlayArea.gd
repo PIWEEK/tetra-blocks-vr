@@ -22,6 +22,8 @@ func _ready():
 	
 	get_node("Timer").connect("timeout", self, "spawn")
 	get_node("Timer2").connect("timeout", self, "move")
+	
+	get_node('/root/Main').addMatrix(matrix)
 
 func addFigure(type, initialRow, initialColumn):
 	enableSpawn = false
@@ -39,7 +41,8 @@ func addFigure(type, initialRow, initialColumn):
 				
 				matrix[currentRow][currentColumn] = {
 					"current": true,
-					"cube": currentFigure
+					"cube": currentFigure,
+					"type": type
 				}
 
 				currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
@@ -101,6 +104,15 @@ func createArea(row, column):
 	
 	add_child(area)
 	
+func removeCurrent():
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var node = matrix[row][column]
+			if node && node.current:
+				node.cube.get_parent().remove_child(node.cube)
+				matrix[row][column] = null
+	
+	enableSpawn = true
 # todo 
 func removeFilledLines():
 	for column in range(matrix[0].size()):

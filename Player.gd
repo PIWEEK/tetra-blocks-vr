@@ -1,9 +1,7 @@
 extends ARVROrigin
 signal moveViewToRight
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
+var figureScene = load("res://Figure.tscn").instance()
 var rightHand
 var figure 
 var currentBody
@@ -17,13 +15,14 @@ func _ready():
 	
 	rightHand = get_node("RightHand");
 	rightHand.connect("button_pressed", self, "buttonPressed")
-	rightHand.connect("button_release", self, "buttonRelease")
+	# rightHand.connect("button_release", self, "buttonRelease")
 	figure = get_node("/root/Main/TestRigidBody")
 	
 	rightHand.get_node("Area").connect("body_entered", self, "_on_body_enter")
 
 func _on_body_enter(body):
 	currentBody = body
+	
 	print ("body enter", body.get_name())
 	
 func _process(delta):
@@ -33,23 +32,52 @@ func buttonPressed(id):
 	if (id == 2 && currentBody):
 		pick()
 	
-func buttonRelease(id):
-	if (id == 2 && currentBody):
-		throw()	
+#func buttonRelease(id):
+#	if (id == 2 && currentBody):
+#		throw()	
 	
 func pick():
 	if (rightHand.get_node("Figure").get_child_count() == 0):
-		print('---->', currentBody.get_mode())
+		var mainScene = get_node('/root/Main')
+		var matrix = mainScene.getMatrix()[0]
+	
+		var rowFinded = null
+		var columnFinded = null
+		
+		for row in range(matrix.size()):
+			for column in range(matrix[row].size()):
+				var node = matrix[row][column]
+				
+				if node && node.cube == currentBody && node.current:
+					rowFinded = row
+					columnFinded = column
+				
+		
 		oldParent = currentBody.get_parent()
-		oldParent.remove_child(currentBody)
+		var handFigure = rightHand.get_node("Figure")
+	
+		if rowFinded && columnFinded:
+			var type = matrix[rowFinded][columnFinded].type
+		
+			var handCubes = figureScene.create(type)
+			handCubes.matrix.invert()
+			
+			for row in range(handCubes.matrix.size()):
+				for column in range(handCubes.matrix[row].size()):
+					if handCubes.matrix[row][column]:
+						var currentFigure = handCubes.cubes.pop_front()
+						print('añado')
+						handFigure.add_child(currentFigure)
+						currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
+						currentFigure.translation.x = 0.2 * column
+						currentFigure.translation.y = 0.2 * row
+				
+		
+		# todo: improve get center
+		handFigure.translation = Vector3(-0.2, -0.2, 0)
+		mainScene.getPlayArea().removeCurrent()
 		
 		print("pick")
-		currentBody.translation = Vector3(0, 0, 0)
-		currentBody.rotation_degrees = Vector3(0, 0, 0)
-		
-		currentBody.set_mode(1)
-		rightHand.get_node("Figure").add_child(currentBody)
-		# child.set_owner(rightHand)
 	
 func throw():
 	if (currentBody):
