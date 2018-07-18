@@ -84,10 +84,11 @@ _sections_unfolded = [ "Light", "Omni" ]
 
 [node name="PlayArea" parent="." index="3" instance=ExtResource( 4 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.10915 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.781545, -1.65841 )
 
 [node name="Start" parent="." index="4" instance=ExtResource( 5 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.32925 )
+visible = false
 
 

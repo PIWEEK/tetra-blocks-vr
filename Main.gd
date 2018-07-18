@@ -1,6 +1,7 @@
 extends Spatial
 
 var globalMatrix = []
+var globalDrag = null
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -15,3 +16,14 @@ func getMatrix():
 	
 func getPlayArea():
 	return get_node("PlayArea")
+	
+func addDrag(type):
+	globalDrag = {
+		"type": type	
+	}
+	
+func removeDrag(type):
+	globalDrag = null
+	
+func getDrag():
+	return globalDrag

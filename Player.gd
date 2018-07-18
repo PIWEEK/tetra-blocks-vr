@@ -2,12 +2,14 @@ extends ARVROrigin
 signal moveViewToRight
 
 var figureScene = load("res://Figure.tscn").instance()
+var main
 var rightHand
-var figure 
 var currentBody
 var oldParent 
 
 func _ready():
+	main = get_node("/root/Main")
+	
 	var vr = ARVRServer.find_interface("OpenVR")
 	if(vr and vr.initialize()):
 		get_viewport().arvr = true
@@ -16,7 +18,6 @@ func _ready():
 	rightHand = get_node("RightHand");
 	rightHand.connect("button_pressed", self, "buttonPressed")
 	# rightHand.connect("button_release", self, "buttonRelease")
-	figure = get_node("/root/Main/TestRigidBody")
 	
 	rightHand.get_node("Area").connect("body_entered", self, "_on_body_enter")
 
@@ -69,12 +70,13 @@ func pick():
 						currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
 						currentFigure.translation.x = 0.2 * column
 						currentFigure.translation.y = 0.2 * row
-				
+			
+			main.addDrag(type)
 		
-		# todo: improve get center
-		handFigure.translation = Vector3(-0.2, -0.2, 0)
-		mainScene.getPlayArea().removeCurrent()
-	
+			# todo: improve get center
+			handFigure.translation = Vector3(-0.2, -0.2, 0)
+			mainScene.getPlayArea().removeCurrent()
+		
 func throw():
 	if (currentBody):
 		print("throw")

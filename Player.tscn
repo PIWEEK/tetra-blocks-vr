@@ -142,7 +142,7 @@ controller_id = 2
 [node name="Area" type="Area" parent="RightHand" index="1"]
 
 editor/display_folded = true
-transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0.08 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0

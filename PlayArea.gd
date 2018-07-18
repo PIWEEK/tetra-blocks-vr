@@ -1,6 +1,8 @@
 extends Spatial
 
 var figure = load("res://Figure.tscn")
+var main
+var player
 const SPEED = -0.5
 var testCount = 0;
 const INITIAL_POSITION = {
@@ -17,6 +19,7 @@ var dropCandidateMatrix
 var dropInProgress = false
 var currentDropCandidate
 var oldDropCandidate
+var inMainArea = false
 
 func _ready():	
 	for row in range(0, 10):
@@ -27,10 +30,16 @@ func _ready():
 			
 	addFigure('o', INITIAL_POSITION.row, INITIAL_POSITION.column)
 	
+	main = get_node("/root/Main")
+	player = main.get_node("PlayerOrigin")
+	
 	get_node("Timer").connect("timeout", self, "spawn")
 	get_node("Timer2").connect("timeout", self, "move")
 	
-	get_node('/root/Main').addMatrix(matrix)
+	get_node("MainArea").connect("area_entered", self, "enterMainArea")
+	get_node("MainArea").connect("area_exited", self, "leaveMainArea")
+	
+	main.addMatrix(matrix)
 
 func addFigure(type, initialRow, initialColumn):
 	enableSpawn = false
@@ -122,18 +131,12 @@ func exitArea():
 	
 func enterArea(body, row, column):
 	if body.get_parent().get_name() == 'RightHand' && body.get_parent().get_node('Figure').get_child_count() > 0:
-		print(row, ' | ', column)
+		# print('enter, ', row, ', ', column)
 		currentDropCandidate = {
+			"type": main.getDrag().type,
 			"row": row,
 			"column": column	
 		}
-		
-#	var areaFinded = null
-#
-#	for area in areas:
-#		if area.node == areaEnterd:
-#			areaFinded = area
-
 
 func removeCurrent():
 	for row in range(matrix.size()):
@@ -171,7 +174,6 @@ func dropCandidate(type, initialRow, initialColumn):
 	
 	if dropCandidateBlocks.size():
 		var count = 0
-		print(initialRow, ' | ', initialColumn);
 		
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
@@ -181,6 +183,7 @@ func dropCandidate(type, initialRow, initialColumn):
 					var currentFigure = dropCandidateBlocks[count]
 					
 					count = count + 1
+					# print('move, ', currentRow, ', ', currentColumn)
 					moveFigure(currentFigure.cube, currentRow, currentColumn)
 	else:
 		var figureData = figureNode.create(type) 
@@ -227,17 +230,42 @@ func deleteDropCandidate():
 		remove_child(it.cube);
 		
 	enableSpawn = true
+	dropCandidateBlocks = []
+	dropCandidateMatrix = null
 	dropInProgress = false
+	currentDropCandidate = null
+	oldDropCandidate = null
+	
+func enterMainArea(area):
+	inMainArea = true
+	
+func leaveMainArea(area):
+	if dropInProgress:
+		deleteDropCandidate()
+	inMainArea = false
 
 func spawn():
 	if enableSpawn:
 		addFigure('t', INITIAL_POSITION.row, INITIAL_POSITION.column)
 			
 		testCount = testCount + 1
+
+#func findArea(transform):
+#	print(transform)
+#	distance_to
+#
+#	for area in areas:
+#
+#		if area.node.global_transform.origin.x >= transform.x &&
+#			area.node.global_transform.origin.y >= transform.y &&
 		
 func _process(delta):		
-	if currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != currentDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
-		dropCandidate('s', currentDropCandidate.row, currentDropCandidate.column)
+#	if inMainArea:
+#		var rightHand = player.get_node('RightHand')
+#		findArea(rightHand.global_transform.origin)
+
+	if inMainArea && currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != oldDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
+		dropCandidate(currentDropCandidate.type, currentDropCandidate.row, currentDropCandidate.column)
 		
 		oldDropCandidate = {
 			"row": currentDropCandidate.row,

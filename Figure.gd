@@ -84,7 +84,7 @@ func figureS():
 
 func figureT():
 	var cubes = instanceCubes()
-	applyColor(cubes, '80080')
+	applyColor(cubes, 'aa00ff')
 	
 	return {
 		"matrix": [
