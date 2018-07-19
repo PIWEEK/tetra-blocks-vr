@@ -66,7 +66,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[node name="PlayArea" type="Spatial" index="0"]
+[node name="PlayArea" type="Spatial"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
