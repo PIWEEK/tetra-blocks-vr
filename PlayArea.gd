@@ -22,12 +22,10 @@ var dropCandidateMatrix
 var dropInProgress = false
 var currentDropCandidate
 var oldDropCandidate
-var inMainArea = false
 var nextMoveReady = false
 var mainArea 
 
 func _ready():	
-	#get_node("Example").queue_free()
 	for row in range(0, ROWS):
 		matrix.append([])
 		for column in range(0, COLUMNS):
@@ -122,18 +120,19 @@ func move():
 					moveFigure(node.cube, newRow, column)
 
 func createArea(row, column):
-#	var area = Area.new()
-#	area.translation.y = 0.2 * row
-#	area.translation.x = 0.2 * column
+#	if get_name() == 'PlayArea':
+#		var area = Area.new()
+#		area.translation.y = 0.2 * row
+#		area.translation.x = 0.2 * column
 #
-#	var collision = CollisionShape.new()
-#	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
-#	collision.shape = BoxShape.new()
-#	area.add_child(collision)
+#		var collision = CollisionShape.new()
+#		collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
+#		collision.shape = BoxShape.new()
+#		area.add_child(collision)
 #
-#	area.connect("area_entered", self, "enterArea", [row, column])
+#		# area.connect("area_entered", self, "enterArea", [row, column])
 #
-#	add_child(area)
+#		add_child(area)
 	areas.append({
 		"row": row,
 		"column": column,
@@ -363,14 +362,19 @@ func deleteDropCandidate():
 	enableSpawn()
 	
 func enterMainArea(area):
-	inMainArea = true
+	# print('enter, ', self.get_name())
+	
 	main.setActiveMatrix(matrix)
 	main.setActivePlayArea(self)
 	
 func leaveMainArea(area):
 	if dropInProgress:
 		deleteDropCandidate()
-	inMainArea = false
+		
+	main.setActivePlayArea(null)
+	
+func isMainArea():
+	return main.getActivePlayArea() == self
 	
 func drop():
 	confirmDropCandidate()
@@ -392,7 +396,6 @@ func spawn():
 
 func enterArea(row, column):
 	if main.getDrag():
-		# print('enter, ', row, ', ', column)
 		currentDropCandidate = {
 			"type": main.getDrag().type,
 			"row": row,
@@ -405,8 +408,8 @@ func _process(delta):
 	if nextMoveReady:
 		move()
 		nextMoveReady = false
-
-	if inMainArea && currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != oldDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
+	
+	if isMainArea() && currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != oldDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
 		dropCandidate(currentDropCandidate.type, currentDropCandidate.row, currentDropCandidate.column)
 
 		oldDropCandidate = {
@@ -414,17 +417,28 @@ func _process(delta):
 			"column": currentDropCandidate.column
 		}
 		
-	if inMainArea && main.getDrag():
-		# print("hand ", rightHand.translation)
+	if isMainArea() && main.getDrag():
+		var column
+		var columnHand
+		var rowHand
+		
+		if self.rotation_degrees.y == 0:
+			column = self.global_transform.origin.x
+			columnHand = rightHand.global_transform.origin.x
+			rowHand = rightHand.global_transform.origin.y
+		else:
+			column = self.global_transform.origin.z
+			columnHand = rightHand.global_transform.origin.z
+			rowHand = rightHand.global_transform.origin.y			
+			
 		for area in areas:
 			# print("area ", area.node.global_transform)
-			var x = self.translation.x + area.column * 0.1
+			var x = column + area.column * 0.1
 			var xx = x + 0.1
+			# print(x, ' | ', xx)
 			
-			var y = self.translation.y + area.row * 0.1
+			var y = self.global_transform.origin.y + area.row * 0.1
 			var yy = y + 0.1
 			
-			var handPosition = rightHand.translation
-			
-			if handPosition.x >= x && handPosition.x <= xx && handPosition.y >= y && handPosition.y <= yy:
+			if columnHand >= x && columnHand <= xx && rowHand >= y && rowHand <= yy:
 				enterArea(area.row, area.column)		

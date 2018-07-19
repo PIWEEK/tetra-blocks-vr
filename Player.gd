@@ -124,9 +124,12 @@ func pick():
 				handFigure.translation = Vector3(-0.1, -0.1, 0)
 			elif type == 'z':
 				handFigure.translation = Vector3(-0.1, 0, 0)
-				
-			mainScene.getActivePlayArea().removeCurrent()
-			mainScene.getActivePlayArea().enableSpawn()
+			
+			var activeArea = mainScene.getActivePlayArea()
+			
+			if activeArea:
+				activeArea.removeCurrent()
+				activeArea.enableSpawn()
 		
 func throw():
 	if (rightHand.get_node("Figure").get_child_count() > 0):

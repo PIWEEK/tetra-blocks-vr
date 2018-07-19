@@ -11,6 +11,12 @@ var figures = {
 func _ready():
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
+	
+#	self.get_node('Spatial/PlayArea').queue_free()
+#	self.get_node('Spatial/PlayArea4').queue_free()
+#	self.get_node('Spatial/PlayArea3').queue_free()
+#	self.get_node('Spatial/PlayArea2').queue_free()
+	
 	pass
 
 func addMatrix(matrix):

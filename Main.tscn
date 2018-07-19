@@ -12,7 +12,7 @@ size = Vector2( 200, 200 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=2]
 
 render_priority = 0
 flags_transparent = false
@@ -64,11 +64,11 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[sub_resource type="PlaneShape" id=2]
+[sub_resource type="PlaneShape" id=3]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Main" type="Spatial" index="0"]
+[node name="Main" type="Spatial"]
 
 script = ExtResource( 1 )
 
@@ -79,7 +79,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.474051, 0.200633, 0.597214 )
 [node name="floor" type="MeshInstance" parent="." index="1"]
 
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.114569, 0.00294551, -0.0108972 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.114569, -0.0545772, -0.0108972 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -91,7 +91,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
-material/0 = SubResource( 3 )
+material/0 = SubResource( 2 )
 _sections_unfolded = [ "LOD", "Transform", "material" ]
 
 [node name="StaticBody" type="StaticBody" parent="floor" index="0"]
@@ -108,7 +108,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="floor/StaticBody" index="0"]
 
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 disabled = false
 
 [node name="Start" parent="." index="2" instance=ExtResource( 3 )]
@@ -117,6 +117,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.32925 )
 visible = false
 
 [node name="Spatial" type="Spatial" parent="." index="3"]
+
+_sections_unfolded = [ "Transform" ]
 
 [node name="PlayArea" parent="Spatial" index="0" instance=ExtResource( 4 )]
 
