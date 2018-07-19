@@ -231,8 +231,6 @@ func dropCandidate(type, initialRow, initialColumn):
 					add_child(currentFigure)
 					moveFigure(currentFigure, currentRow, currentColumn)
 					
-					print(rightHand.rotation_degrees)
-					
 					dropCandidateBlocks.append({
 						"matrix": figureData.matrix,
 						"row": currentRow,
@@ -269,6 +267,7 @@ func deleteDropCandidate():
 	
 func enterMainArea(area):
 	inMainArea = true
+	print(rightHand.rotation_degrees)
 	
 func leaveMainArea(area):
 	if dropInProgress:
