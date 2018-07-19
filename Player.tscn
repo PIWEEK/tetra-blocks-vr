@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://figures/s.png" type="Texture" id=2]
@@ -7,7 +7,8 @@
 [ext_resource path="res://figures/l.png" type="Texture" id=5]
 [ext_resource path="res://figures/t.png" type="Texture" id=6]
 [ext_resource path="res://figures/z.png" type="Texture" id=7]
-[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Tetris_theme.ogg" type="AudioStream" id=8]
+[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=9]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -347,7 +348,7 @@ height = 2.0
 radial_segments = 64
 rings = 4
 
-[node name="PlayerOrigin" type="ARVROrigin"]
+[node name="PlayerOrigin" type="ARVROrigin" index="0"]
 
 world_scale = 1.0
 script = ExtResource( 1 )
@@ -476,11 +477,32 @@ skeleton = NodePath("..")
 material/0 = SubResource( 7 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[node name="LeftHand" parent="." index="1" instance=ExtResource( 8 )]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="ARVRCamera" index="1"]
+
+stream = ExtResource( 8 )
+attenuation_model = 0
+unit_db = -5.0
+unit_size = 1.0
+max_db = 3.0
+pitch_scale = 1.0
+autoplay = true
+max_distance = 0.0
+out_of_range_mode = 0
+bus = "Master"
+area_mask = 1
+emission_angle_enabled = false
+emission_angle_degrees = 45.0
+emission_angle_filter_attenuation_db = -12.0
+attenuation_filter_cutoff_hz = 5000.0
+attenuation_filter_db = -24.0
+doppler_tracking = 0
+_sections_unfolded = [ "Emission Angle" ]
+
+[node name="LeftHand" parent="." index="1" instance=ExtResource( 9 )]
 
 visible = false
 
-[node name="RightHand" parent="." index="2" instance=ExtResource( 8 )]
+[node name="RightHand" parent="." index="2" instance=ExtResource( 9 )]
 
 controller_id = 2
 
