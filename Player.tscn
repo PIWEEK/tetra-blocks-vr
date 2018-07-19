@@ -402,7 +402,7 @@ height = 2.0
 radial_segments = 64
 rings = 4
 
-[node name="PlayerOrigin" type="ARVROrigin"]
+[node name="PlayerOrigin" type="ARVROrigin" index="0"]
 
 world_scale = 1.0
 script = ExtResource( 1 )
@@ -581,7 +581,7 @@ controller_id = 2
 
 [node name="Area" type="Area" parent="RightHand" index="1"]
 
-transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0.08 )
+transform = Transform( 0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0, 0, 0.08 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -606,7 +606,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="RightHand/Area" index="0"]
 
-transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, -0.5 )
+transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, -0.5 )
 shape = SubResource( 9 )
 disabled = false
 _sections_unfolded = [ "Transform" ]

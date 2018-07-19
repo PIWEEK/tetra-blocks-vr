@@ -68,7 +68,7 @@ _sections_unfolded = [ "Albedo" ]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Main" type="Spatial" index="0"]
+[node name="Main" type="Spatial"]
 
 script = ExtResource( 1 )
 
