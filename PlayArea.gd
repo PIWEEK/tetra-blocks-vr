@@ -290,14 +290,11 @@ func dropCandidate(type, initialRow, initialColumn):
 		for i in range(rotateTimes):
 			rotatedMatrix = rotateMatrix(rotatedMatrix, dir)
 			
-		print("rotations ", rotateTimes, ', ', rightHand.rotation_degrees.z)
-		print("generated")
-		print(rotatedMatrix)
-		dropCandidateMatrix = figureData.matrix
+		dropCandidateMatrix = rotatedMatrix
 		
-		for row in range(rotatedMatrix.size()):
-			for column in range(rotatedMatrix[row].size()):
-				if rotatedMatrix[row][column]:
+		for row in range(dropCandidateMatrix.size()):
+			for column in range(dropCandidateMatrix[row].size()):
+				if dropCandidateMatrix[row][column]:
 					var currentRow = row + initialRow
 					var currentColumn = column + initialColumn
 					var currentFigure = figureData.cubes.pop_front()
