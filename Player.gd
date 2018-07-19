@@ -130,10 +130,13 @@ func pick():
 		
 func throw():
 	if (rightHand.get_node("Figure").get_child_count() > 0):
+		# print("throw")
 		emit_signal("throw")
 		
 		for i in rightHand.get_node("Figure").get_children():
 			i.queue_free()
+			
+		main.removeDrag()
 
 func _input(event):
 	if Input.is_action_pressed("ui_right"):

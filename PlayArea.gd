@@ -25,6 +25,7 @@ var nextMoveReady = false
 var mainArea 
 
 func _ready():	
+
 	for row in range(0, 20):
 		matrix.append([])
 		for column in range(0, 10):
@@ -119,22 +120,22 @@ func move():
 					moveFigure(node.cube, newRow, column)
 
 func createArea(row, column):
-	var area = Area.new()
-	area.translation.y = 0.2 * row
-	area.translation.x = 0.2 * column
-
-	var collision = CollisionShape.new()
-	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
-	collision.shape = BoxShape.new()
-	area.add_child(collision)
-
-	area.connect("area_entered", self, "enterArea", [row, column])
-
-	add_child(area)
+#	var area = Area.new()
+#	area.translation.y = 0.2 * row
+#	area.translation.x = 0.2 * column
+#
+#	var collision = CollisionShape.new()
+#	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
+#	collision.shape = BoxShape.new()
+#	area.add_child(collision)
+#
+#	area.connect("area_entered", self, "enterArea", [row, column])
+#
+#	add_child(area)
 	areas.append({
 		"row": row,
 		"column": column,
-		"node": area
+		# "node": area
 	})
 	
 func exitArea():
@@ -218,9 +219,9 @@ func calculateMatrixSubstract(matrix):
 	var precisionRow = matrix.size()
 	var precisionColumn = matrix.size()
 	var center = ceil(float(matrix.size()) / float(2)) - 1
-	print(matrix.size())
-	print(float(matrix.size()) / float(2))
-	print(center)
+#	print(matrix.size())
+#	print(float(matrix.size()) / float(2))
+#	print(center)
 	
 	for row in range(matrix.size()):
 		for column in range(matrix[row].size()):
@@ -232,10 +233,10 @@ func calculateMatrixSubstract(matrix):
 
 	for column in range(matrix[currentRow].size()):
 		var node = matrix[currentRow][column]
-		print('column')
-		print('center, ', center)
-		print('column, ', column)
-		print('precisionColumn, ', precisionColumn)
+#		print('column')
+#		print('center, ', center)
+#		print('column, ', column)
+#		print('precisionColumn, ', precisionColumn)
 		var precision = center - column
 		if precision < 0:
 			precision = -precision
@@ -243,7 +244,7 @@ func calculateMatrixSubstract(matrix):
 		if node && precision < precisionColumn:
 			precisionColumn = precision
 			currentColumn = column
-			print('write')
+#			print('write')
 	# 
 	#
 	return {
@@ -303,10 +304,10 @@ func dropCandidate(type, initialRow, initialColumn):
 		for i in range(rotateTimes):
 			rotatedMatrix = rotateMatrix(rotatedMatrix, dir)
 			
-		print('----------------------------')
-		print(rotatedMatrix)
+#		print('----------------------------')
+#		print(rotatedMatrix)
 		var centerSubstract = calculateMatrixSubstract(rotatedMatrix)
-		print(centerSubstract)
+#		print(centerSubstract)
 			
 		dropCandidateMatrix = rotatedMatrix
 		
@@ -386,8 +387,8 @@ func spawn():
 	addFigure(randomFigure(), INITIAL_POSITION.row, INITIAL_POSITION.column)
 	testCount = testCount + 1
 
-func enterArea(body, row, column):
-	if body.get_parent().get_name() == 'RightHand' && body.get_parent().get_node('Figure').get_child_count() > 0:
+func enterArea(row, column):
+	if main.getDrag():
 		# print('enter, ', row, ', ', column)
 		currentDropCandidate = {
 			"type": main.getDrag().type,
@@ -397,32 +398,6 @@ func enterArea(body, row, column):
 
 func _process(delta):
 	# print(str(Engine.get_frames_per_second()))
-	
-	#	area.translation.y = 0.2 * row
-	#	area.translation.x = 0.2 * column
-	
-	if inMainArea:
-		print("hand ", rightHand.translation)
-		
-		for area in areas:
-			# print("area ", area.node.global_transform)
-			var x = -(area.column * 0.2)
-			var xx = x + 0.2
-			
-			var y = area.row * 0.2
-			var yy = y + 0.2
-			
-			var handPosition = rightHand.translation
-			
-			if handPosition.y >= y && handPosition.y <= yy:
-				pass
-				# print("row, ", area.row)
-				
-			if handPosition.x >= x && handPosition.x <= xx:
-				print("column, ", area.column, ', ', x, ', ', xx, ', ', handPosition.x)
-			
-	#		if handPosition.x >= x && handPosition.x <= xx && handPosition.y >= y && handPosition.y <= yy:
-	#			print('collision')
 	
 	if nextMoveReady:
 		move()
@@ -435,3 +410,18 @@ func _process(delta):
 			"row": currentDropCandidate.row,
 			"column": currentDropCandidate.column
 		}
+		
+	if inMainArea && main.getDrag():
+		# print("hand ", rightHand.translation)
+		for area in areas:
+			# print("area ", area.node.global_transform)
+			var x = self.translation.x + area.column * 0.1
+			var xx = x + 0.1
+			
+			var y = self.translation.y + area.row * 0.1
+			var yy = y + 0.1
+			
+			var handPosition = rightHand.translation
+			
+			if handPosition.x >= x && handPosition.x <= xx && handPosition.y >= y && handPosition.y <= yy:
+				enterArea(area.row, area.column)		

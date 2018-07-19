@@ -36,7 +36,7 @@ func addDrag(type):
 		"type": type	
 	}
 	
-func removeDrag(type):
+func removeDrag():
 	globalDrag = null
 	
 func getDrag():

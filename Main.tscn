@@ -17,7 +17,7 @@ subdivide_depth = 0
 
 plane = Plane( 0, 1, 0, 0 )
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=3]
 
 render_priority = 0
 flags_transparent = false
@@ -71,7 +71,7 @@ _sections_unfolded = [ "Ambient Occlusion", "Anisotropy", "Clearcoat", "Depth", 
 
 [sub_resource type="CubeMesh" id=4]
 
-material = SubResource( 5 )
+material = SubResource( 3 )
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
@@ -153,7 +153,7 @@ omni_range = 50.0
 omni_attenuation = 1.0
 omni_shadow_mode = 1
 omni_shadow_detail = 1
-_sections_unfolded = [ "Light", "Omni" ]
+_sections_unfolded = [ "Light", "Omni", "Transform" ]
 
 [node name="top" type="MeshInstance" parent="Spatial" index="2"]
 
