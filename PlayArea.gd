@@ -44,6 +44,8 @@ func _ready():
 	get_node("MainArea").connect("area_exited", self, "leaveMainArea")
 	
 	main.addMatrix(matrix) 
+	
+	addFigure('i', INITIAL_POSITION.row, INITIAL_POSITION.column)
 
 func addFigure(type, initialRow, initialColumn):
 	disableSpawn()
@@ -295,8 +297,8 @@ func dropCandidate(type, initialRow, initialColumn):
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
 				if dropCandidateMatrix[row][column]:
-					var currentRow = (row + initialRow) + (dropCandidateMatrix.size() / 2)
-					var currentColumn = (column + initialColumn) + (dropCandidateMatrix.size() / 2)
+					var currentRow = (row + initialRow) 
+					var currentColumn = (column + initialColumn)
 					var currentFigure = figureData.cubes.pop_front()
 	
 					currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))				
