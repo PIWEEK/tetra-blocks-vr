@@ -8,14 +8,15 @@ var currentBody
 
 signal throw
 
-var piecesNames = ['s', 'i', 'j', 'l', 't', 'z']
+var piecesNames = ['s', 'i', 'j', 'l', 't', 'z', 'o']
 var pieces = {
 	"s": null,
 	"i": null,
 	"j": null,
 	"l": null,
 	"t": null,
-	"z": null
+	"z": null,
+	'o': null
 }
 
 func _ready():
@@ -38,6 +39,7 @@ func _ready():
 	pieces['j'] = get_node("ARVRCamera/currentPieces/j")
 	pieces['l'] = get_node("ARVRCamera/currentPieces/l")
 	pieces['t'] = get_node("ARVRCamera/currentPieces/t")
+	pieces['o'] = get_node("ARVRCamera/currentPieces/o")
 	pieces['z'] = get_node("ARVRCamera/currentPieces/z")
 	
 	hideAllPieces()

@@ -6,7 +6,7 @@
 
 extents = Vector3( 1.34557, 2.61867, 1 )
 
-[node name="PlayArea" type="Spatial" index="0"]
+[node name="PlayArea" type="Spatial"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]

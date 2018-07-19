@@ -245,6 +245,45 @@ func rotateMatrix(matrix, dir):
 		
 	return newMatrix
 
+func calculateMatrixSubstract(matrix):
+	var currentRow = 0
+	var currentColumn = 0
+	var precisionRow = matrix.size()
+	var precisionColumn = matrix.size()
+	var center = ceil(float(matrix.size()) / float(2)) - 1
+	print(matrix.size())
+	print(float(matrix.size()) / float(2))
+	print(center)
+	
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var node = matrix[row][column]
+			
+			if node && center - row < precisionRow:
+				precisionRow = center - row
+				currentRow = row
+
+	for column in range(matrix[currentRow].size()):
+		var node = matrix[currentRow][column]
+		print('column')
+		print('center, ', center)
+		print('column, ', column)
+		print('precisionColumn, ', precisionColumn)
+		var precision = center - column
+		if precision < 0:
+			precision = -precision
+		
+		if node && precision < precisionColumn:
+			precisionColumn = precision
+			currentColumn = column
+			print('write')
+	# 
+	#
+	return {
+		"x": currentColumn,	
+		"y": currentRow
+	}
+
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
 	disableSpawn()
@@ -253,11 +292,13 @@ func dropCandidate(type, initialRow, initialColumn):
 	if dropCandidateBlocks.size():
 		var count = 0
 		
+		var centerSubstract = calculateMatrixSubstract(dropCandidateMatrix)
+		
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
 				if dropCandidateMatrix[row][column]:
-					var currentRow = row + initialRow
-					var currentColumn = column + initialColumn
+					var currentRow = row + initialRow - centerSubstract.y
+					var currentColumn = column + initialColumn - centerSubstract.x
 					var currentFigure = dropCandidateBlocks[count]
 					
 					count = count + 1
@@ -295,13 +336,18 @@ func dropCandidate(type, initialRow, initialColumn):
 		for i in range(rotateTimes):
 			rotatedMatrix = rotateMatrix(rotatedMatrix, dir)
 			
+		print('----------------------------')
+		print(rotatedMatrix)
+		var centerSubstract = calculateMatrixSubstract(rotatedMatrix)
+		print(centerSubstract)
+			
 		dropCandidateMatrix = rotatedMatrix
 		
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
 				if dropCandidateMatrix[row][column]:
-					var currentRow = (row + initialRow) 
-					var currentColumn = (column + initialColumn)
+					var currentRow = (row + initialRow) - centerSubstract.y
+					var currentColumn = (column + initialColumn) - centerSubstract.x
 					var currentFigure = figureData.cubes.pop_front()
 	
 					currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))				

@@ -1,14 +1,15 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://figures/s.png" type="Texture" id=2]
 [ext_resource path="res://figures/i.png" type="Texture" id=3]
 [ext_resource path="res://figures/j.png" type="Texture" id=4]
 [ext_resource path="res://figures/l.png" type="Texture" id=5]
-[ext_resource path="res://figures/t.png" type="Texture" id=6]
-[ext_resource path="res://figures/z.png" type="Texture" id=7]
-[ext_resource path="res://Tetris_theme.ogg" type="AudioStream" id=8]
-[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=9]
+[ext_resource path="res://figures/o.png" type="Texture" id=6]
+[ext_resource path="res://figures/t.png" type="Texture" id=7]
+[ext_resource path="res://figures/z.png" type="Texture" id=8]
+[ext_resource path="res://Tetris_theme.ogg" type="AudioStream" id=9]
+[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=10]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -229,7 +230,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Emission", "Flags", "NormalMap", "Parameters", "Rim", "Roughness", "UV1", "Vertex Color" ]
 
-[sub_resource type="SpatialMaterial" id=6]
+[sub_resource type="SpatialMaterial" id=10]
 
 render_priority = 0
 flags_transparent = true
@@ -280,9 +281,9 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Flags" ]
+_sections_unfolded = [ "Albedo", "Emission", "Flags", "NormalMap", "Parameters", "Rim", "Roughness", "UV1", "Vertex Color" ]
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 
 render_priority = 0
 flags_transparent = true
@@ -335,6 +336,59 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Flags" ]
 
+[sub_resource type="SpatialMaterial" id=7]
+
+render_priority = 0
+flags_transparent = true
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 1, 1, 1 )
+albedo_texture = ExtResource( 8 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo", "Flags" ]
+
 [sub_resource type="BoxShape" id=8]
 
 extents = Vector3( 1, 1, 1 )
@@ -348,7 +402,7 @@ height = 2.0
 radial_segments = 64
 rings = 4
 
-[node name="PlayerOrigin" type="ARVROrigin"]
+[node name="PlayerOrigin" type="ARVROrigin" index="0"]
 
 world_scale = 1.0
 script = ExtResource( 1 )
@@ -372,7 +426,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="currentPieces" type="Spatial" parent="ARVRCamera" index="0"]
 
-transform = Transform( -0.1, 3.89414e-008, 1.70218e-015, 0, -4.37114e-009, 0.1, 3.89414e-008, 0.1, 4.37114e-009, 0.343217, -0.259286, -0.652116 )
+transform = Transform( -0.02, 7.78829e-009, 3.40437e-016, 0, -8.74228e-010, 0.02, 7.78829e-009, 0.02, 8.74228e-010, 0.0438459, -0.0589955, -0.086352 )
 _sections_unfolded = [ "Transform", "material" ]
 
 [node name="s" type="MeshInstance" parent="ARVRCamera/currentPieces" index="0"]
@@ -443,7 +497,24 @@ skeleton = NodePath("..")
 material/0 = SubResource( 5 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[node name="t" type="MeshInstance" parent="ARVRCamera/currentPieces" index="4"]
+[node name="o" type="MeshInstance" parent="ARVRCamera/currentPieces" index="4"]
+
+transform = Transform( 0.5, -2.84217e-014, -8.47033e-022, 2.84217e-014, 0.5, 5.32907e-015, 0, -5.32907e-015, 0.5, 0, 0, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 1 )
+skeleton = NodePath("..")
+material/0 = SubResource( 10 )
+_sections_unfolded = [ "Transform", "material" ]
+
+[node name="t" type="MeshInstance" parent="ARVRCamera/currentPieces" index="5"]
 
 transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 layers = 1
@@ -460,7 +531,7 @@ skeleton = NodePath("..")
 material/0 = SubResource( 6 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[node name="z" type="MeshInstance" parent="ARVRCamera/currentPieces" index="5"]
+[node name="z" type="MeshInstance" parent="ARVRCamera/currentPieces" index="6"]
 
 transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 layers = 1
@@ -479,7 +550,7 @@ _sections_unfolded = [ "Transform", "material" ]
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="ARVRCamera" index="1"]
 
-stream = ExtResource( 8 )
+stream = ExtResource( 9 )
 attenuation_model = 0
 unit_db = -5.0
 unit_size = 1.0
@@ -498,11 +569,11 @@ attenuation_filter_db = -24.0
 doppler_tracking = 0
 _sections_unfolded = [ "Emission Angle" ]
 
-[node name="LeftHand" parent="." index="1" instance=ExtResource( 9 )]
+[node name="LeftHand" parent="." index="1" instance=ExtResource( 10 )]
 
 visible = false
 
-[node name="RightHand" parent="." index="2" instance=ExtResource( 9 )]
+[node name="RightHand" parent="." index="2" instance=ExtResource( 10 )]
 
 controller_id = 2
 
