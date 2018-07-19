@@ -7,6 +7,8 @@ var rightHand
 var leftHand
 var testCount = 0;
 var timer
+const ROWS = 20
+const COLUMNS = 10
 const INITIAL_POSITION = {
 	"row": 17,
 	"column": 3
@@ -26,9 +28,9 @@ var mainArea
 
 func _ready():	
 
-	for row in range(0, 20):
+	for row in range(0, ROWS):
 		matrix.append([])
-		for column in range(0, 10):
+		for column in range(0, COLUMNS):
 			matrix[row].append(null)
 			createArea(row, column)
 	
@@ -339,13 +341,14 @@ func resetDrop():
 	oldDropCandidate = null	
 				
 func confirmDropCandidate():
-	for currentBlockCandidate in dropCandidateBlocks:
-		matrix[currentBlockCandidate.row][currentBlockCandidate.column] = {
-			"current": true,
-			"cube": currentBlockCandidate.cube,
-			"type": currentBlockCandidate.type
-		}
-		
+	if row <= ROWS && column <= COLUMNS && row >= 0 && column >= 0:
+		for currentBlockCandidate in dropCandidateBlocks:
+			matrix[currentBlockCandidate.row][currentBlockCandidate.column] = {
+				"current": true,
+				"cube": currentBlockCandidate.cube,
+				"type": currentBlockCandidate.type
+			}
+			
 		# print(currentBlockCandidate.row, ' | ', currentBlockCandidate.column)
 	if dropCandidateBlocks.size() > 0:
 		main.addFigure(get_name(), dropCandidateBlocks[0].type)
