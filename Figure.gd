@@ -1,6 +1,15 @@
 extends Spatial
 
 var cube = load("res://Cube.tscn")
+var colors = {
+	's': Color(0, 255, 0, 1),
+	'j': Color(0, 0, 255, 1),
+	'i': Color(0, 255, 255, 1),
+	't': Color(170, 0, 255, 1),
+	'l': Color(255, 165, 0, 1),
+	'o': Color(255, 255, 0, 1),
+	'z': Color(255, 0, 0, 1)
+}
 
 func create(type):
 	if type == 's':
@@ -20,7 +29,7 @@ func create(type):
 
 func figureI():
 	var cubes = instanceCubes()
-	applyColor(cubes, '00FFFF')
+	applyColor(cubes, colors['i'])
 	
 	return {
 		"matrix": [
@@ -34,7 +43,7 @@ func figureI():
 	
 func figureJ():
 	var cubes = instanceCubes()
-	applyColor(cubes, '0000FF')
+	applyColor(cubes, colors['j'])
 	
 	return {
 		"matrix": [
@@ -47,7 +56,7 @@ func figureJ():
 	
 func figureL():
 	var cubes = instanceCubes()
-	applyColor(cubes, 'FFA500')
+	applyColor(cubes, colors['l'])
 	
 	return {
 		"matrix": [
@@ -60,7 +69,7 @@ func figureL():
 	
 func figureO():
 	var cubes = instanceCubes()
-	applyColor(cubes, 'FFFF00')
+	applyColor(cubes, colors['o'])
 	
 	return {
 		"matrix": [
@@ -72,7 +81,7 @@ func figureO():
 	
 func figureS():
 	var cubes = instanceCubes()
-	applyColor(cubes, '00FF00')
+	applyColor(cubes, colors['s'])
 	
 	return {
 		"matrix": [
@@ -85,7 +94,7 @@ func figureS():
 
 func figureT():
 	var cubes = instanceCubes()
-	applyColor(cubes, 'aa00ff')
+	applyColor(cubes, colors['t'])
 	
 	return {
 		"matrix": [
@@ -98,7 +107,7 @@ func figureT():
 	
 func figureZ():
 	var cubes = instanceCubes()
-	applyColor(cubes, 'FF0000')
+	applyColor(cubes, colors['z'])
 	
 	return {
 		"matrix": [
@@ -112,6 +121,7 @@ func figureZ():
 func applyColor(cubes, color):
 	for cube in cubes:
 		var material = SpatialMaterial.new()
+		material.flags_transparent = true
 		material.albedo_color = color
 		cube.get_node('MeshInstance').set_surface_material(0, material)
 	

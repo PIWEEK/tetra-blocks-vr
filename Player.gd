@@ -93,6 +93,9 @@ func pick():
 			var handCubes = figureScene.create(type)
 			handCubes.matrix.invert()
 			
+			for cube in handCubes.cubes:
+				cube.get_node('MeshInstance').get_surface_material(0).albedo_color.a = 0.2
+			
 			for row in range(handCubes.matrix.size()):
 				for column in range(handCubes.matrix[row].size()):
 					if handCubes.matrix[row][column]:
