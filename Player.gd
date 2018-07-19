@@ -8,6 +8,16 @@ var currentBody
 
 signal throw
 
+var piecesNames = ['s', 'i', 'j', 'l', 't', 'z']
+var pieces = {
+	"s": null,
+	"i": null,
+	"j": null,
+	"l": null,
+	"t": null,
+	"z": null
+}
+
 func _ready():
 	# print('ready')
 	main = get_node("/root/Main")
@@ -22,13 +32,32 @@ func _ready():
 	rightHand.connect("button_release", self, "buttonRelease")
 	
 	rightHand.get_node("Area").connect("body_entered", self, "_on_body_enter")
+	
+	pieces['s'] = get_node("ARVRCamera/currentPieces/s")
+	pieces['i'] = get_node("ARVRCamera/currentPieces/i")
+	pieces['j'] = get_node("ARVRCamera/currentPieces/j")
+	pieces['l'] = get_node("ARVRCamera/currentPieces/l")
+	pieces['t'] = get_node("ARVRCamera/currentPieces/t")
+	pieces['z'] = get_node("ARVRCamera/currentPieces/z")
+	
+	hideAllPieces()
+	
+func hideAllPieces():
+	for name in piecesNames:
+		pieces[name].visible = false
 
 func _on_body_enter(body):
 	currentBody = body
 	# print('_on_body_enter', currentBody)
 	
 func _process(delta):
-	pass
+	if main:
+		var currentFigures = main.getFigures()
+		
+		hideAllPieces()
+		
+		if currentFigures['PlayArea']:
+			pieces[currentFigures['PlayArea']].visible = true
 	
 func buttonPressed(id):	
 	# print('buttonPressed')

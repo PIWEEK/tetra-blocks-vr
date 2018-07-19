@@ -21,6 +21,7 @@ var dropInProgress = false
 var currentDropCandidate
 var oldDropCandidate
 var inMainArea = false
+var nextMoveReady = false
 
 func _ready():	
 	for row in range(0, 20):
@@ -38,7 +39,7 @@ func _ready():
 	timer = get_node("Timer")
 	
 	timer.connect("timeout", self, "spawn")
-	get_node("Timer2").connect("timeout", self, "move")
+	get_node("Timer2").connect("timeout", self, "prepareMove")
 	
 	get_node("MainArea").connect("area_entered", self, "enterMainArea")
 	get_node("MainArea").connect("area_exited", self, "leaveMainArea")
@@ -47,6 +48,7 @@ func _ready():
 
 func addFigure(type, initialRow, initialColumn):
 	disableSpawn()
+	main.addFigure(get_name(), type)
 	var figureData = figureNode.create(type)
 	
 	figureData.matrix.invert()
@@ -95,6 +97,9 @@ func disableCurrent():
 			if node:
 				node.current = false
 
+func prepareMove():
+	nextMoveReady = true
+
 func move():
 	if !canMove():
 		disableCurrent()
@@ -121,7 +126,7 @@ func createArea(row, column):
 	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
 	collision.shape = BoxShape.new()
 	area.add_child(collision)
-	
+
 	area.connect("area_entered", self, "enterArea", [row, column])
 	
 	add_child(area)
@@ -366,10 +371,15 @@ func spawn():
 	addFigure(randomFigure(), INITIAL_POSITION.row, INITIAL_POSITION.column)
 	testCount = testCount + 1
 		
-func _process(delta):		
+func _process(delta):
+	# print(str(Engine.get_frames_per_second()))
+	if nextMoveReady:
+		move()
+		nextMoveReady = false
+
 	if inMainArea && currentDropCandidate && (!oldDropCandidate || (currentDropCandidate.row != oldDropCandidate.row || currentDropCandidate.column != oldDropCandidate.column)):
 		dropCandidate(currentDropCandidate.type, currentDropCandidate.row, currentDropCandidate.column)
-		
+
 		oldDropCandidate = {
 			"row": currentDropCandidate.row,
 			"column": currentDropCandidate.column

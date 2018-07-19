@@ -18,7 +18,7 @@ subdivide_depth = 0
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Main" type="Spatial" index="0"]
+[node name="Main" type="Spatial"]
 
 script = ExtResource( 1 )
 
@@ -92,7 +92,7 @@ visible = false
 
 [node name="PlayArea" parent="Spatial" index="0" instance=ExtResource( 5 )]
 
-transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.706985, 0.781545, -1.65841 )
+transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.706985, 0.25, -1.65841 )
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="5"]
 

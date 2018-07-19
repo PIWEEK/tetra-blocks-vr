@@ -4,6 +4,9 @@ var globalMatrix = []
 var globalDrag = null
 var activeMatrix = null
 var activePlayArea = null
+var figures = {
+	"PlayArea": null
+}
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -38,3 +41,9 @@ func removeDrag(type):
 	
 func getDrag():
 	return globalDrag
+	
+func addFigure(name, figure):
+	figures[name] = figure
+	
+func getFigures():
+	return figures
