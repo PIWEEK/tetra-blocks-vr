@@ -22,6 +22,7 @@ var currentDropCandidate
 var oldDropCandidate
 var inMainArea = false
 var nextMoveReady = false
+var mainArea 
 
 func _ready():	
 	for row in range(0, 20):
@@ -40,9 +41,9 @@ func _ready():
 	
 	timer.connect("timeout", self, "spawn")
 	get_node("Timer2").connect("timeout", self, "prepareMove")
-	
-	get_node("MainArea").connect("area_entered", self, "enterMainArea")
-	get_node("MainArea").connect("area_exited", self, "leaveMainArea")
+	mainArea = get_node("MainArea")
+	mainArea.connect("area_entered", self, "enterMainArea")
+	mainArea.connect("area_exited", self, "leaveMainArea")
 	
 	main.addMatrix(matrix) 
 
@@ -121,14 +122,14 @@ func createArea(row, column):
 	var area = Area.new()
 	area.translation.y = 0.2 * row
 	area.translation.x = 0.2 * column
-	
+
 	var collision = CollisionShape.new()
 	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
 	collision.shape = BoxShape.new()
 	area.add_child(collision)
 
 	area.connect("area_entered", self, "enterArea", [row, column])
-	
+
 	add_child(area)
 	areas.append({
 		"row": row,
@@ -138,15 +139,6 @@ func createArea(row, column):
 	
 func exitArea():
 	deleteDropCandidate()
-	
-func enterArea(body, row, column):
-	if body.get_parent().get_name() == 'RightHand' && body.get_parent().get_node('Figure').get_child_count() > 0:
-		# print('enter, ', row, ', ', column)
-		currentDropCandidate = {
-			"type": main.getDrag().type,
-			"row": row,
-			"column": column	
-		}
 		
 func removeCurrent():
 	for row in range(matrix.size()):
@@ -194,32 +186,7 @@ func removeFilledLines():
 					matrix[row][column] = null;
 					
 					moveFigure(node.cube, newRow, column)
-			
-#func rotateMatrix(matrix):
-#	var rowLength = sqrt(matrix.size())
-#	var newMatrix = []
-#
-#	for row in range(matrix.size()):
-#		newMatrix.append([])
-#
-#		for column in range(matrix[row].size()):
-#			matrix[row].append(null)	
-#
-#	for i in range(matrix.size()):
-#	    # convert to x/y
-#		var x = fmod(float(i), rowLength)
-#		var y = floor(i / rowLength)
-#
-#		# find new x/y
-#		var newX = rowLength - y - 1
-#		var newY = x
-#
-#		# convert back to index
-#		var newPosition = newY * rowLength + newX;
-#		newMatrix[newPosition] = matrix[i];
-#
-#	return newMatrix
-	
+
 func rotateMatrix(matrix, dir):
 	var newMatrix = []
 
@@ -418,9 +385,45 @@ func enableSpawn():
 func spawn():
 	addFigure(randomFigure(), INITIAL_POSITION.row, INITIAL_POSITION.column)
 	testCount = testCount + 1
-		
+
+func enterArea(body, row, column):
+	if body.get_parent().get_name() == 'RightHand' && body.get_parent().get_node('Figure').get_child_count() > 0:
+		# print('enter, ', row, ', ', column)
+		currentDropCandidate = {
+			"type": main.getDrag().type,
+			"row": row,
+			"column": column	
+		}
+
 func _process(delta):
 	# print(str(Engine.get_frames_per_second()))
+	
+	#	area.translation.y = 0.2 * row
+	#	area.translation.x = 0.2 * column
+	
+	if inMainArea:
+		print("hand ", rightHand.translation)
+		
+		for area in areas:
+			# print("area ", area.node.global_transform)
+			var x = -(area.column * 0.2)
+			var xx = x + 0.2
+			
+			var y = area.row * 0.2
+			var yy = y + 0.2
+			
+			var handPosition = rightHand.translation
+			
+			if handPosition.y >= y && handPosition.y <= yy:
+				pass
+				# print("row, ", area.row)
+				
+			if handPosition.x >= x && handPosition.x <= xx:
+				print("column, ", area.column, ', ', x, ', ', xx, ', ', handPosition.x)
+			
+	#		if handPosition.x >= x && handPosition.x <= xx && handPosition.y >= y && handPosition.y <= yy:
+	#			print('collision')
+	
 	if nextMoveReady:
 		move()
 		nextMoveReady = false

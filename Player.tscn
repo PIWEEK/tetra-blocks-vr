@@ -402,7 +402,7 @@ height = 2.0
 radial_segments = 64
 rings = 4
 
-[node name="PlayerOrigin" type="ARVROrigin" index="0"]
+[node name="PlayerOrigin" type="ARVROrigin"]
 
 world_scale = 1.0
 script = ExtResource( 1 )

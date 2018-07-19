@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Figure.gd" type="Script" id=1]
 
-[node name="Figure" type="Spatial"]
+[node name="Figure" type="Spatial" index="0"]
 
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
 script = ExtResource( 1 )
