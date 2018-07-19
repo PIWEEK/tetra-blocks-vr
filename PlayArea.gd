@@ -333,7 +333,9 @@ func confirmDropCandidate():
 		}
 		
 		# print(currentBlockCandidate.row, ' | ', currentBlockCandidate.column)
-		
+	if dropCandidateBlocks.size() > 0:
+		main.addFigure(get_name(), dropCandidateBlocks[0].type)
+	
 	resetDrop()
 				
 func deleteDropCandidate():
