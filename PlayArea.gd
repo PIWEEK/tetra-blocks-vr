@@ -189,6 +189,44 @@ func removeFilledLines():
 					matrix[row][column] = null;
 					
 					moveFigure(node.cube, newRow, column)
+			
+func rotateMatrix(matrix, dir):
+	var rowLength = sqrt(matrix.size())
+	var newMatrix = []
+	
+	for row in range(matrix.size()):
+		newMatrix.append([])
+		
+		for column in range(matrix[row].size()):
+			newMatrix[row].append([])
+	
+	for i in range(matrix.size()):
+	    # convert to x/y
+	    var x = i % rowLength
+	    var y = floor(i / rowLength)
+	
+	    # find new x/y
+	    var newX = rowLength - y - 1
+	    var newY = x
+	
+	    # convert back to index
+	    var newPosition = newY * rowLength + newX;
+	    newMatrix[newPosition] = matrix[i];
+	
+#func rotateMatrix(matrix, dir):
+#	for row in range(matrix.size()):
+#		for column in range(row):
+#			var rowColumn = matrix[row][column]
+#			var columnRow = matrix[column][row] 
+#
+#			matrix[row][column] = columnRow
+#			matrix[column][row] = rowColumn
+#
+#	if dir:
+#		for row in range(matrix.size()):	
+#			matrix[row].invert()
+#	else:
+#		matrix.invert()
 
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
