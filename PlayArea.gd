@@ -295,8 +295,8 @@ func dropCandidate(type, initialRow, initialColumn):
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
 				if dropCandidateMatrix[row][column]:
-					var currentRow = row + initialRow
-					var currentColumn = column + initialColumn
+					var currentRow = (row + initialRow) + (dropCandidateMatrix.size() / 2)
+					var currentColumn = (column + initialColumn) + (dropCandidateMatrix.size() / 2)
 					var currentFigure = figureData.cubes.pop_front()
 	
 					currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))				

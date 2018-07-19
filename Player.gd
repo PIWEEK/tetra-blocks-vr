@@ -76,8 +76,21 @@ func pick():
 			
 			main.addDrag(type)
 		
-			# todo: improve get center
-			# handFigure.translation = Vector3(-0.2, -0.2, 0)
+			if type == 's':
+				handFigure.translation = Vector3(-0.1, -0.1, 0)
+			elif type == 'j':
+				handFigure.translation = Vector3(-0.08, 0, 0)
+			elif type == 'i':
+				handFigure.translation = Vector3(-0.15, 0, 0)
+			elif type == 't':
+				handFigure.translation = Vector3(-0.1, -0.1, 0)
+			elif type == 'l':
+				handFigure.translation = Vector3(-0.08, 0, 0)
+			elif type == 'o':
+				handFigure.translation = Vector3(-0.1, -0.1, 0)
+			elif type == 'z':
+				handFigure.translation = Vector3(-0.1, 0, 0)
+				
 			mainScene.getPlayArea().removeCurrent()
 			mainScene.getPlayArea().enableSpawn()
 		
