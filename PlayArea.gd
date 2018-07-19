@@ -190,43 +190,55 @@ func removeFilledLines():
 					
 					moveFigure(node.cube, newRow, column)
 			
-func rotateMatrix(matrix, dir):
-	var rowLength = sqrt(matrix.size())
-	var newMatrix = []
+#func rotateMatrix(matrix):
+#	var rowLength = sqrt(matrix.size())
+#	var newMatrix = []
+#
+#	for row in range(matrix.size()):
+#		newMatrix.append([])
+#
+#		for column in range(matrix[row].size()):
+#			matrix[row].append(null)	
+#
+#	for i in range(matrix.size()):
+#	    # convert to x/y
+#		var x = fmod(float(i), rowLength)
+#		var y = floor(i / rowLength)
+#
+#		# find new x/y
+#		var newX = rowLength - y - 1
+#		var newY = x
+#
+#		# convert back to index
+#		var newPosition = newY * rowLength + newX;
+#		newMatrix[newPosition] = matrix[i];
+#
+#	return newMatrix
 	
+func rotateMatrix(matrix, dir):
+	var newMatrix = []
+
 	for row in range(matrix.size()):
 		newMatrix.append([])
-		
+
 		for column in range(matrix[row].size()):
-			newMatrix[row].append([])
+			newMatrix[row].append(null)
 	
-	for i in range(matrix.size()):
-	    # convert to x/y
-	    var x = i % rowLength
-	    var y = floor(i / rowLength)
-	
-	    # find new x/y
-	    var newX = rowLength - y - 1
-	    var newY = x
-	
-	    # convert back to index
-	    var newPosition = newY * rowLength + newX;
-	    newMatrix[newPosition] = matrix[i];
-	
-#func rotateMatrix(matrix, dir):
-#	for row in range(matrix.size()):
-#		for column in range(row):
-#			var rowColumn = matrix[row][column]
-#			var columnRow = matrix[column][row] 
-#
-#			matrix[row][column] = columnRow
-#			matrix[column][row] = rowColumn
-#
-#	if dir:
-#		for row in range(matrix.size()):	
-#			matrix[row].invert()
-#	else:
-#		matrix.invert()
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			var rowColumn = matrix[row][column]
+			var columnRow = matrix[column][row] 
+
+			newMatrix[row][column] = columnRow
+			newMatrix[column][row] = rowColumn
+
+	if dir:
+		for row in range(newMatrix.size()):	
+			newMatrix[row].invert()
+	else:
+		newMatrix.invert()
+		
+	return newMatrix
 
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
@@ -255,11 +267,37 @@ func dropCandidate(type, initialRow, initialColumn):
 		var figureData = figureNode.create(type) 
 		figureData.matrix.invert()
 		
+		var rotateTimes = 0
+		if rightHand.rotation_degrees.z > 0 && rightHand.rotation_degrees.z <= 45:
+			rotateTimes = 0
+		elif rightHand.rotation_degrees.z > 45 && rightHand.rotation_degrees.z <= 135:
+			rotateTimes = 1
+		elif rightHand.rotation_degrees.z > 135 && rightHand.rotation_degrees.z <= 180:
+			rotateTimes = 2
+		elif rightHand.rotation_degrees.z < 0 && rightHand.rotation_degrees.z >= -45:
+			rotateTimes = 0
+		elif rightHand.rotation_degrees.z < -45 && rightHand.rotation_degrees.z >= -135:
+			rotateTimes = 1
+		elif rightHand.rotation_degrees.z < -135 && rightHand.rotation_degrees.z >= -180:
+			rotateTimes = 2
+		
+		var rotatedMatrix = figureData.matrix
+		var dir = false
+		
+		if rightHand.rotation_degrees.z > 0:
+			dir = true
+		
+		for i in range(rotateTimes):
+			rotatedMatrix = rotateMatrix(rotatedMatrix, dir)
+			
+		print("rotations ", rotateTimes, ', ', rightHand.rotation_degrees.z)
+		print("generated")
+		print(rotatedMatrix)
 		dropCandidateMatrix = figureData.matrix
 		
-		for row in range(figureData.matrix.size()):
-			for column in range(figureData.matrix[row].size()):
-				if figureData.matrix[row][column]:
+		for row in range(rotatedMatrix.size()):
+			for column in range(rotatedMatrix[row].size()):
+				if rotatedMatrix[row][column]:
 					var currentRow = row + initialRow
 					var currentColumn = column + initialColumn
 					var currentFigure = figureData.cubes.pop_front()
@@ -305,7 +343,6 @@ func deleteDropCandidate():
 	
 func enterMainArea(area):
 	inMainArea = true
-	print(rightHand.rotation_degrees)
 	
 func leaveMainArea(area):
 	if dropInProgress:
