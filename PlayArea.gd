@@ -341,7 +341,7 @@ func resetDrop():
 				
 func confirmDropCandidate():
 	for currentBlockCandidate in dropCandidateBlocks:
-		if currentBlockCandidate.row <= ROWS && currentBlockCandidate.column <= COLUMNS && currentBlockCandidate.row >= 0 && currentBlockCandidate.column >= 0:
+		if currentBlockCandidate.row < ROWS && currentBlockCandidate.column < COLUMNS && currentBlockCandidate.row >= 0 && currentBlockCandidate.column >= 0:
 			matrix[currentBlockCandidate.row][currentBlockCandidate.column] = {
 				"current": true,
 				"cube": currentBlockCandidate.cube,
