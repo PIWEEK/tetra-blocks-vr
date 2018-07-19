@@ -27,7 +27,7 @@ var nextMoveReady = false
 var mainArea 
 
 func _ready():	
-
+	#get_node("Example").queue_free()
 	for row in range(0, ROWS):
 		matrix.append([])
 		for column in range(0, COLUMNS):
@@ -122,18 +122,18 @@ func move():
 					moveFigure(node.cube, newRow, column)
 
 func createArea(row, column):
-#	var area = Area.new()
-#	area.translation.y = 0.2 * row
-#	area.translation.x = 0.2 * column
-#
-#	var collision = CollisionShape.new()
-#	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
-#	collision.shape = BoxShape.new()
-#	area.add_child(collision)
-#
-#	area.connect("area_entered", self, "enterArea", [row, column])
-#
-#	add_child(area)
+	var area = Area.new()
+	area.translation.y = 0.2 * row
+	area.translation.x = 0.2 * column
+
+	var collision = CollisionShape.new()
+	collision.scale_object_local(Vector3(0.1, 0.1, 0.1))
+	collision.shape = BoxShape.new()
+	area.add_child(collision)
+
+	area.connect("area_entered", self, "enterArea", [row, column])
+
+	add_child(area)
 	areas.append({
 		"row": row,
 		"column": column,
@@ -341,8 +341,8 @@ func resetDrop():
 	oldDropCandidate = null	
 				
 func confirmDropCandidate():
-	if row <= ROWS && column <= COLUMNS && row >= 0 && column >= 0:
-		for currentBlockCandidate in dropCandidateBlocks:
+	for currentBlockCandidate in dropCandidateBlocks:
+		if currentBlockCandidate.row <= ROWS && currentBlockCandidate.column <= COLUMNS && currentBlockCandidate.row >= 0 && currentBlockCandidate.column >= 0:
 			matrix[currentBlockCandidate.row][currentBlockCandidate.column] = {
 				"current": true,
 				"cube": currentBlockCandidate.cube,
