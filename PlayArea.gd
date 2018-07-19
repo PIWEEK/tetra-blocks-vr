@@ -9,7 +9,7 @@ var testCount = 0;
 var timer
 const INITIAL_POSITION = {
 	"row": 17,
-	"column": 1
+	"column": 3
 }
 
 var figureNode = figure.instance()
@@ -44,8 +44,6 @@ func _ready():
 	get_node("MainArea").connect("area_exited", self, "leaveMainArea")
 	
 	main.addMatrix(matrix) 
-	
-	addFigure('i', INITIAL_POSITION.row, INITIAL_POSITION.column)
 
 func addFigure(type, initialRow, initialColumn):
 	disableSpawn()
@@ -342,6 +340,8 @@ func deleteDropCandidate():
 	
 func enterMainArea(area):
 	inMainArea = true
+	main.setActiveMatrix(matrix)
+	main.setActivePlayArea(self)
 	
 func leaveMainArea(area):
 	if dropInProgress:

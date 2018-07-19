@@ -3,8 +3,8 @@
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://toon.tres" type="Material" id=3]
-[ext_resource path="res://PlayArea.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Start.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Start.tscn" type="PackedScene" id=4]
+[ext_resource path="res://PlayArea.tscn" type="PackedScene" id=5]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -17,7 +17,7 @@ subdivide_depth = 0
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Main" type="Spatial"]
+[node name="Main" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 
@@ -82,13 +82,15 @@ omni_shadow_mode = 1
 omni_shadow_detail = 1
 _sections_unfolded = [ "Light", "Omni" ]
 
-[node name="PlayArea" parent="." index="3" instance=ExtResource( 4 )]
-
-transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.706985, 0.781545, -1.65841 )
-
-[node name="Start" parent="." index="4" instance=ExtResource( 5 )]
+[node name="Start" parent="." index="3" instance=ExtResource( 4 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.32925 )
 visible = false
+
+[node name="Spatial" type="Spatial" parent="." index="4"]
+
+[node name="PlayArea" parent="Spatial" index="0" instance=ExtResource( 5 )]
+
+transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.706985, 0.781545, -1.65841 )
 
 

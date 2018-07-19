@@ -25,12 +25,13 @@ func _ready():
 
 func _on_body_enter(body):
 	currentBody = body
-	# 	print('_on_body_enter', currentBody)
+	# print('_on_body_enter', currentBody)
 	
 func _process(delta):
 	pass
 	
 func buttonPressed(id):	
+	# print('buttonPressed')
 	if (id == 2 && currentBody):
 		pick()
 	
@@ -40,11 +41,10 @@ func buttonRelease(id):
 		throw()	
 	
 func pick():
-	# print(currentBody, ' | ', rightHand.get_node("Figure").get_child_count())
 	if (currentBody && rightHand.get_node("Figure").get_child_count() == 0):
 		var mainScene = get_node('/root/Main')
-		var matrix = mainScene.getMatrix()[0]
-	
+		var matrix = mainScene.getActiveMatrix()
+		
 		var rowFinded = null
 		var columnFinded = null
 		
@@ -91,8 +91,8 @@ func pick():
 			elif type == 'z':
 				handFigure.translation = Vector3(-0.1, 0, 0)
 				
-			mainScene.getPlayArea().removeCurrent()
-			mainScene.getPlayArea().enableSpawn()
+			mainScene.getActivePlayArea().removeCurrent()
+			mainScene.getActivePlayArea().enableSpawn()
 		
 func throw():
 	if (rightHand.get_node("Figure").get_child_count() > 0):
