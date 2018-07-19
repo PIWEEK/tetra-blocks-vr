@@ -68,7 +68,7 @@ _sections_unfolded = [ "Albedo" ]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Main" type="Spatial"]
+[node name="Main" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 
@@ -126,11 +126,11 @@ transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0 )
 
 [node name="PlayArea2" parent="Spatial" index="1" instance=ExtResource( 4 )]
 
-transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 1.26 )
+transform = Transform( -0.6, 0, 5.24537e-008, 0, 0.6, 0, -5.24537e-008, 0, -0.6, 1.08, 0, 1.26 )
 
 [node name="PlayArea3" parent="Spatial" index="2" instance=ExtResource( 4 )]
 
-transform = Transform( 0, 0, -0.6, 0, 0.6, 0, 0.6, 0, 0, -0.09, 0, 0.09 )
+transform = Transform( -2.62268e-008, 0, 0.6, 0, 0.6, 0, -0.6, 0, -2.62268e-008, -0.09, 0, 1.17 )
 
 [node name="PlayArea4" parent="Spatial" index="3" instance=ExtResource( 4 )]
 

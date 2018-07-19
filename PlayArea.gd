@@ -426,10 +426,20 @@ func _process(delta):
 			column = self.global_transform.origin.x
 			columnHand = rightHand.global_transform.origin.x
 			rowHand = rightHand.global_transform.origin.y
+		elif self.get_name() == 'PlayArea2': # opposite main play area
+			column = -self.global_transform.origin.x
+			columnHand = -rightHand.global_transform.origin.x
+			rowHand = rightHand.global_transform.origin.y			
+		elif self.get_name() == 'PlayArea3': # opposite main play area
+			column = -self.global_transform.origin.z
+			columnHand = -rightHand.global_transform.origin.z
+			rowHand = rightHand.global_transform.origin.y
 		else:
 			column = self.global_transform.origin.z
 			columnHand = rightHand.global_transform.origin.z
-			rowHand = rightHand.global_transform.origin.y			
+			rowHand = rightHand.global_transform.origin.y
+			
+		print(columnHand, ' | ', self.rotation_degrees.y)		
 			
 		for area in areas:
 			# print("area ", area.node.global_transform)
@@ -441,4 +451,5 @@ func _process(delta):
 			var yy = y + 0.1
 			
 			if columnHand >= x && columnHand <= xx && rowHand >= y && rowHand <= yy:
+				print(area.column)
 				enterArea(area.row, area.column)		

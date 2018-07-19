@@ -75,6 +75,7 @@ func pick():
 	if (currentBody && rightHand.get_node("Figure").get_child_count() == 0):
 		var mainScene = get_node('/root/Main')
 		var matrix = mainScene.getActiveMatrix()
+		var activeArea = mainScene.getActivePlayArea()
 		
 		var rowFinded = null
 		var columnFinded = null
@@ -124,8 +125,6 @@ func pick():
 				handFigure.translation = Vector3(-0.1, -0.1, 0)
 			elif type == 'z':
 				handFigure.translation = Vector3(-0.1, 0, 0)
-			
-			var activeArea = mainScene.getActivePlayArea()
 			
 			if activeArea:
 				activeArea.removeCurrent()
