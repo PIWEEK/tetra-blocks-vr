@@ -106,6 +106,8 @@ func pick():
 	
 		if rowFinded && columnFinded:
 			var type = matrix[rowFinded][columnFinded].type
+
+			main.addDrag(type)
 		
 			var handCubes = figureScene.create(type)
 			handCubes.matrix.invert()
@@ -122,8 +124,6 @@ func pick():
 						currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))
 						currentFigure.translation.x = 0.2 * column
 						currentFigure.translation.y = 0.2 * row
-			
-			main.addDrag(type)
 		
 			if type == 's':
 				handFigure.translation = Vector3(-0.1, -0.1, 0)

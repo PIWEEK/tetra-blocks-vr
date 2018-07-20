@@ -24,6 +24,8 @@ var currentDropCandidate
 var oldDropCandidate
 var nextMoveReady = false
 var mainArea 
+var rotateOnInitDrop = false
+var dropCandidateOriginal
 
 func _ready():	
 	for row in range(0, ROWS):
@@ -273,6 +275,23 @@ func calculateOutOfLimits(matrix, initialColumn, centerSubstract):
 
 	return outOfLimitX
 	
+func getRotates():
+	var rotateTimes = 0
+	if rightHand.rotation_degrees.z > 0 && rightHand.rotation_degrees.z <= 45:
+		rotateTimes = 0
+	elif rightHand.rotation_degrees.z > 45 && rightHand.rotation_degrees.z <= 135:
+		rotateTimes = 1
+	elif rightHand.rotation_degrees.z > 135 && rightHand.rotation_degrees.z <= 180:
+		rotateTimes = 2
+	elif rightHand.rotation_degrees.z < 0 && rightHand.rotation_degrees.z >= -45:
+		rotateTimes = 0
+	elif rightHand.rotation_degrees.z < -45 && rightHand.rotation_degrees.z >= -135:
+		rotateTimes = 1
+	elif rightHand.rotation_degrees.z < -135 && rightHand.rotation_degrees.z >= -180:
+		rotateTimes = 2
+	
+	return rotateTimes
+	
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
 	disableSpawn()
@@ -281,13 +300,24 @@ func dropCandidate(type, initialRow, initialColumn):
 	if dropCandidateBlocks.size():
 		var count = 0
 		
-		var centerSubstract = calculateMatrixSubstract(dropCandidateMatrix)
+		var rotateTimes = getRotates()
+
+		var rotatedMatrix = dropCandidateOriginal
+		var dir = false
 		
-		var outOfLimitX = calculateOutOfLimits(dropCandidateMatrix, initialColumn, centerSubstract)
+		if rightHand.rotation_degrees.z > 0:
+			dir = true
 		
-		for row in range(dropCandidateMatrix.size()):
-			for column in range(dropCandidateMatrix[row].size()):
-				if dropCandidateMatrix[row][column]:
+		for i in range(rotateTimes):
+			rotatedMatrix = rotateMatrix(rotatedMatrix, dir)		
+		
+		var centerSubstract = calculateMatrixSubstract(rotatedMatrix)
+		
+		var outOfLimitX = calculateOutOfLimits(rotatedMatrix, initialColumn, centerSubstract)
+		
+		for row in range(rotatedMatrix.size()):
+			for column in range(rotatedMatrix[row].size()):
+				if rotatedMatrix[row][column]:
 					var currentRow = row + initialRow - centerSubstract.y
 					var currentColumn = column + initialColumn - centerSubstract.x + outOfLimitX
 					var currentFigure = dropCandidateBlocks[count]
@@ -304,34 +334,25 @@ func dropCandidate(type, initialRow, initialColumn):
 		var figureData = figureNode.create(type) 
 		figureData.matrix.invert()
 		
-		var rotateTimes = 0
-		if rightHand.rotation_degrees.z > 0 && rightHand.rotation_degrees.z <= 45:
-			rotateTimes = 0
-		elif rightHand.rotation_degrees.z > 45 && rightHand.rotation_degrees.z <= 135:
-			rotateTimes = 1
-		elif rightHand.rotation_degrees.z > 135 && rightHand.rotation_degrees.z <= 180:
-			rotateTimes = 2
-		elif rightHand.rotation_degrees.z < 0 && rightHand.rotation_degrees.z >= -45:
-			rotateTimes = 0
-		elif rightHand.rotation_degrees.z < -45 && rightHand.rotation_degrees.z >= -135:
-			rotateTimes = 1
-		elif rightHand.rotation_degrees.z < -135 && rightHand.rotation_degrees.z >= -180:
-			rotateTimes = 2
+		var rotateTimes = getRotates()
+		
+		if rotateTimes:
+			rotateOnInitDrop = rotateTimes
+		else:
+			rotateOnInitDrop = 0
 		
 		var rotatedMatrix = figureData.matrix
 		var dir = false
+		dropCandidateOriginal = figureData.matrix
 		
 		if rightHand.rotation_degrees.z > 0:
 			dir = true
 		
 		for i in range(rotateTimes):
 			rotatedMatrix = rotateMatrix(rotatedMatrix, dir)
-			
-#		print('----------------------------')
-#		print(rotatedMatrix)
+
 		var centerSubstract = calculateMatrixSubstract(rotatedMatrix)
-#		print(centerSubstract)
-			
+		
 		dropCandidateMatrix = rotatedMatrix
 		
 		var outOfLimitX = calculateOutOfLimits(dropCandidateMatrix, initialColumn, centerSubstract)
@@ -362,6 +383,7 @@ func resetDrop():
 	dropInProgress = false
 	currentDropCandidate = null
 	oldDropCandidate = null	
+	dropCandidateOriginal = null
 				
 func confirmDropCandidate():
 	for currentBlockCandidate in dropCandidateBlocks:
@@ -386,10 +408,13 @@ func deleteDropCandidate():
 	enableSpawn()
 	
 func enterMainArea(area):
-	# print('enter, ', self.get_name())
-	
-	main.setActiveMatrix(matrix)
-	main.setActivePlayArea(self)
+	if !main.getDrag() || !main.getActivePlayArea():
+		print('...............................')
+		print('enter, ', self.get_name())
+		print('drag, ', main.getDrag())
+		print('getActivePlayArea, ', main.getActivePlayArea())
+		main.setActiveMatrix(matrix)
+		main.setActivePlayArea(self)
 	
 func leaveMainArea(area):
 	if dropInProgress:
