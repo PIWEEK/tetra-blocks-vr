@@ -252,7 +252,27 @@ func calculateMatrixSubstract(matrix):
 		"x": currentColumn,	
 		"y": currentRow
 	}
+	
+func calculateOutOfLimits(matrix, initialColumn, centerSubstract):
+	var outOfLimitX = 0
+	
+	for row in range(matrix.size()):
+		for column in range(matrix[row].size()):
+			if matrix[row][column]:
+				var currentColumn = column + initialColumn - centerSubstract.x
+				
+				if currentColumn >= COLUMNS && currentColumn > outOfLimitX:
+					outOfLimitX = currentColumn
+				elif currentColumn < 0 && currentColumn < outOfLimitX:
+					outOfLimitX = currentColumn
+	
+	if outOfLimitX >= COLUMNS:
+		outOfLimitX = COLUMNS - outOfLimitX - 1
+	else:
+		outOfLimitX = -outOfLimitX
 
+	return outOfLimitX
+	
 func dropCandidate(type, initialRow, initialColumn):
 	removeCurrent()
 	disableSpawn()
@@ -263,11 +283,13 @@ func dropCandidate(type, initialRow, initialColumn):
 		
 		var centerSubstract = calculateMatrixSubstract(dropCandidateMatrix)
 		
+		var outOfLimitX = calculateOutOfLimits(dropCandidateMatrix, initialColumn, centerSubstract)
+		
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
 				if dropCandidateMatrix[row][column]:
 					var currentRow = row + initialRow - centerSubstract.y
-					var currentColumn = column + initialColumn - centerSubstract.x
+					var currentColumn = column + initialColumn - centerSubstract.x + outOfLimitX
 					var currentFigure = dropCandidateBlocks[count]
 					
 					count = count + 1
@@ -312,11 +334,13 @@ func dropCandidate(type, initialRow, initialColumn):
 			
 		dropCandidateMatrix = rotatedMatrix
 		
+		var outOfLimitX = calculateOutOfLimits(dropCandidateMatrix, initialColumn, centerSubstract)
+		
 		for row in range(dropCandidateMatrix.size()):
 			for column in range(dropCandidateMatrix[row].size()):
 				if dropCandidateMatrix[row][column]:
 					var currentRow = (row + initialRow) - centerSubstract.y
-					var currentColumn = (column + initialColumn) - centerSubstract.x
+					var currentColumn = (column + initialColumn) - centerSubstract.x + outOfLimitX
 					var currentFigure = figureData.cubes.pop_front()
 	
 					currentFigure.scale_object_local(Vector3(0.1, 0.1, 0.1))				
