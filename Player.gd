@@ -65,6 +65,9 @@ func buttonPressed(id):
 	# print('buttonPressed')
 	if (id == 2 && currentBody):
 		pick()
+		
+	if (id == 7): 
+		main.startGame()
 	
 func buttonRelease(id):
 	if (id == 2 && currentBody):
@@ -145,8 +148,9 @@ func _input(event):
 		emit_signal("moveViewToRight")
 
 func _on_PlayerOrigin_moveViewToRight():
-	var angle = self.rotation_degrees.y
-	if(angle < 360):
-		self.rotation_degrees = Vector3(0, angle - 45, 0)
-	else:
-		self.rotation_degrees = Vector3(0, 0, 0)
+	pass
+#	var angle = self.rotation_degrees.y
+#	if(angle < 360):
+#		self.rotation_degrees = Vector3(0, angle - 45, 0)
+#	else:
+#		self.rotation_degrees = Vector3(0, 0, 0)

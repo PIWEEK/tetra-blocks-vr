@@ -87,7 +87,7 @@ autostart = true
 
 [node name="MainArea" type="Area" parent="." index="2"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.1, 0, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0, 0 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0

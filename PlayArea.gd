@@ -439,7 +439,7 @@ func _process(delta):
 			columnHand = rightHand.global_transform.origin.z
 			rowHand = rightHand.global_transform.origin.y
 			
-		print(columnHand, ' | ', self.rotation_degrees.y)		
+		# print(columnHand, ' | ', self.rotation_degrees.y)		
 			
 		for area in areas:
 			# print("area ", area.node.global_transform)
@@ -451,5 +451,5 @@ func _process(delta):
 			var yy = y + 0.1
 			
 			if columnHand >= x && columnHand <= xx && rowHand >= y && rowHand <= yy:
-				print(area.column)
+				# print(area.column)
 				enterArea(area.row, area.column)		

@@ -581,7 +581,7 @@ controller_id = 2
 
 [node name="Area" type="Area" parent="RightHand" index="1"]
 
-transform = Transform( 0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0, 0, 0.08 )
+transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0.08 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0

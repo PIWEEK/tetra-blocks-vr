@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Start.tscn" type="PackedScene" id=3]
-[ext_resource path="res://PlayArea.tscn" type="PackedScene" id=4]
-[ext_resource path="res://default_env.tres" type="Environment" id=5]
+[ext_resource path="res://default_env.tres" type="Environment" id=4]
 
 [sub_resource type="PlaneMesh" id=1]
 
@@ -69,7 +68,7 @@ _sections_unfolded = [ "Albedo" ]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Main" type="Spatial" index="0"]
+[node name="Main" type="Spatial"]
 
 script = ExtResource( 1 )
 
@@ -117,28 +116,8 @@ disabled = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706985, 0.3, -2.32925 )
 visible = false
 
-[node name="Spatial" type="Spatial" parent="." index="3"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3"]
 
-_sections_unfolded = [ "Transform" ]
-
-[node name="PlayArea" parent="Spatial" index="0" instance=ExtResource( 4 )]
-
-transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0 )
-
-[node name="PlayArea2" parent="Spatial" index="1" instance=ExtResource( 4 )]
-
-transform = Transform( -0.6, 0, 5.24537e-08, 0, 0.6, 0, -5.24537e-08, 0, -0.6, 1.08, 0, 1.26 )
-
-[node name="PlayArea3" parent="Spatial" index="2" instance=ExtResource( 4 )]
-
-transform = Transform( -2.62268e-08, 0, 0.6, 0, 0.6, 0, -0.6, 0, -2.62268e-08, -0.09, 0, 1.17 )
-
-[node name="PlayArea4" parent="Spatial" index="3" instance=ExtResource( 4 )]
-
-transform = Transform( 0, 0, -0.6, 0, 0.6, 0, 0.6, 0, 0, 1.17, 0, 0.09 )
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="4"]
-
-environment = ExtResource( 5 )
+environment = ExtResource( 4 )
 
 

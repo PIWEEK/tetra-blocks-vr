@@ -7,18 +7,27 @@ var activePlayArea = null
 var figures = {
 	"PlayArea": null
 }
+var game = load("res://Game.tscn")
+var game_started = false
 
 func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
+    set_process_input(true)
 	
 #	self.get_node('Spatial/PlayArea').queue_free()
 #	self.get_node('Spatial/PlayArea4').queue_free()
 #	self.get_node('Spatial/PlayArea3').queue_free()
-#	self.get_node('Spatial/PlayArea2').queue_free()
-	
-	pass
+#	self.get_node('Spatial/PlayArea2').queue_free()	
 
+
+func _input(event):
+	if event.is_action_pressed("ui_accept"): 
+		startGame()
+		
+func startGame():
+	if !game_started: 
+		add_child(game.instance())
+		game_started = true
+	
 func addMatrix(matrix):
 	globalMatrix.append(matrix)
 	
