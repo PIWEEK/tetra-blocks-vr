@@ -68,6 +68,17 @@ func buttonPressed(id):
 		
 	if (id == 7): 
 		main.startGame()
+		
+	if (id == 1):
+		togglePause()
+	
+func togglePause():
+	if get_tree().paused:
+		$ARVRCamera/Music.play()
+		get_tree().paused = false
+	else:
+		$ARVRCamera/Music.stop()
+		get_tree().paused = true
 	
 func buttonRelease(id):
 	if (id == 2 && currentBody):

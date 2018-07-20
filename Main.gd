@@ -8,7 +8,7 @@ var figures = {
 	"PlayArea": null
 }
 var game = load("res://Game.tscn")
-var game_started = false
+var currentGameNode
 
 func _ready():
     set_process_input(true)
@@ -22,11 +22,19 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("ui_accept"): 
 		startGame()
+
+func generateGame():
+	currentGameNode = game.instance()
+	add_child(currentGameNode)
+	$PlayerOrigin.get_node("ARVRCamera/Music").play()
 		
 func startGame():
-	if !game_started: 
-		add_child(game.instance())
-		game_started = true
+	if !currentGameNode: 
+		generateGame()
+	else:
+		$PlayerOrigin.get_node("ARVRCamera/Music").stop()
+		currentGameNode.queue_free()
+		generateGame()
 	
 func addMatrix(matrix):
 	globalMatrix.append(matrix)
